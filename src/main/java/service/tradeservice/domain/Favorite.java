@@ -1,11 +1,16 @@
 package service.tradeservice.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import service.tradeservice.domain.item.Item;
-import service.tradeservice.domain.item.SaleStatus;
+import service.tradeservice.domain.item.RegisterStatus;
 import service.tradeservice.domain.user.User;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Favorite {
     @Id @GeneratedValue
     @Column(name = "favorite_id")
@@ -21,5 +26,5 @@ public class Favorite {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private SaleStatus saleStatus;
+    private RegisterStatus saleStatus;
 }

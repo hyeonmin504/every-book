@@ -1,21 +1,17 @@
 package service.tradeservice.domain.item;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import service.tradeservice.domain.item.Item;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Book extends Item {
-    @Id @GeneratedValue
-    @Column(name = "item_id")
-    private Long id;
-
     private String isbn;
-    private String witter;
+    private String author;
     private String publisher;
     private String publisherDate;
 
@@ -29,4 +25,39 @@ public class Book extends Item {
      */
     private int bookStatus;
     private int writtenStatus;
+
+    public Book(Category category, String itemName, int price, int stockQuantity, LocalDateTime registerDate, RegisterStatus status, String author, String publisher, String publisherDate, int bookStatus, int writtenStatus) {
+        super(category, itemName, price, stockQuantity, registerDate, status);
+        this.author = author;
+        this.publisher = publisher;
+        this.publisherDate = publisherDate;
+        this.bookStatus = bookStatus;
+        this.writtenStatus = writtenStatus;
+    }
+
+    public void createBook(String author, String publisher, String publisherDate, int bookStatus, int writtenStatus, int stock, Category category, String itemName, int price, int stockQuantity, RegisterStatus status) {
+        this.author = author;
+        this.publisher = publisher;
+        this.publisherDate = publisherDate;
+        this.bookStatus = bookStatus;
+        this.writtenStatus = writtenStatus;
+        setItem(category,itemName,price,stockQuantity, status);
+
+    }
+
+    protected void setBook(String author, String publisher, String publisherDate, int bookStatus, int writtenStatus) {
+        this.author = author;
+        this.publisher = publisher;
+        this.publisherDate = publisherDate;
+        this.bookStatus = bookStatus;
+        this.writtenStatus = writtenStatus;
+    }
+
+    public static Book updateBook(Book book,Book findBook) {
+        findBook.updateItemInfo(book);
+        findBook.setBook(book.author,book.publisher,book.publisherDate,book.bookStatus,book.writtenStatus);
+
+        return findBook;
+    }
+
 }

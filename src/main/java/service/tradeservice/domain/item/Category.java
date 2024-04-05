@@ -1,8 +1,8 @@
 package service.tradeservice.domain.item;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.Email;
 
-@Embeddable
 public enum Category {
     BOOK
 }

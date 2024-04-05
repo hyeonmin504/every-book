@@ -1,33 +1,59 @@
 package service.tradeservice.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import service.tradeservice.domain.item.Item;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Orders {
+
+    public static final int SALE = 1;
+    public static final int TRADE = 2;
+    public static final int COMP = 3;
+    public static final int CANCEL = 0;
 
     @Id @GeneratedValue
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "iem_id")
-    private Item item;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id")
     private Room room;
 
     private int price;
+
     private int quantity;
 
     /**
-     * 0 == 거래 중 ( 대화방 생성 )
-     * 1 == 거래 완료
-     * 2 == 거래 실패
+     * 1 == 거래 전 - item.registerItem = SALE ( 대화방 생성 ) // 둘다 대화방 삭제 가능
+     * 2 == 거래 중 - item.registerItem = TRADE ( 판매자만 판매 결정을 확정 했을 경우 ) // 구매자만 대화방 삭제 가능
+     * 3 == 판매 완료 - item.registerItem = COMP ( 판매자, 구매자 둘다 확정을 결정한 경우 ) // 둘다 대화방 삭제 가능
+     * 0 == 거래 실패 - item.registerItem = CANCEL ( 구매자가 구매 확정을 취소한 경우 ) // 둘다 대화방 삭제 가능
      */
     private int orderStatus;
 
+    public void changeOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     private LocalDateTime soldDate;
+
+    public Orders(int price, int quantity, int orderStatus) {
+        this.price = price;
+        this.quantity = quantity;
+        this.orderStatus = orderStatus;
+    }
+
+    public static Orders createOrder(int price, int quantity) {
+        return new Orders(price, quantity, 1);
+    }
+
+
 }

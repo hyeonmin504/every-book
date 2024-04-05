@@ -43,4 +43,8 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public void setJoinDay() {
+        this.joinDate = LocalDateTime.now();
+    }
 }
