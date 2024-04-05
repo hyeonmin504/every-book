@@ -14,10 +14,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Orders {
 
-    public static final int SALE = 1;
-    public static final int TRADE = 2;
-    public static final int COMP = 3;
-    public static final int CANCEL = 0;
+    public static final int TRADING = 1;
+    public static final int SELL_CONFIRM = 2;
+    public static final int TRADE_COMP = 3;
+    public static final int TRADE_CANCEL = 0;
 
     @Id @GeneratedValue
     @Column(name = "order_id")
@@ -33,7 +33,7 @@ public class Orders {
 
     /**
      * 1 == 거래 전 - item.registerItem = SALE ( 대화방 생성 ) // 둘다 대화방 삭제 가능
-     * 2 == 거래 중 - item.registerItem = TRADE ( 판매자만 판매 결정을 확정 했을 경우 ) // 구매자만 대화방 삭제 가능
+     * 2 == 거래 중 - item.registerItem = NO_STOCK ( 판매자만 판매 결정을 확정 했을 경우 && 재고 수량이 없을 경우 ) // 구매자만 대화방 삭제 가능
      * 3 == 판매 완료 - item.registerItem = COMP ( 판매자, 구매자 둘다 확정을 결정한 경우 ) // 둘다 대화방 삭제 가능
      * 0 == 거래 실패 - item.registerItem = CANCEL ( 구매자가 구매 확정을 취소한 경우 ) // 둘다 대화방 삭제 가능
      */
@@ -55,5 +55,7 @@ public class Orders {
         return new Orders(price, quantity, 1);
     }
 
-
+    public void setRoom(Room room) {
+        this.room = room;
+    }
 }

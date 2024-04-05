@@ -25,7 +25,7 @@ public class Room {
     private LocalDateTime createDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "buyer_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -33,7 +33,7 @@ public class Room {
     private Item item;
 
 
-    @OneToOne(mappedBy = "room", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Orders order;
 
 
@@ -49,7 +49,7 @@ public class Room {
     public void changeState(int state) {
         this.state = state;
     }
-    public Room(User user, Item item, Orders orders) {
+    protected Room(User user, Item item, Orders orders) {
         this.state = VISIBLE;
         this.createDate = LocalDateTime.now();
         this.user = user;
@@ -61,5 +61,18 @@ public class Room {
         return new Room(user, item,orders);
     }
 
+    // == 연관관계 매서드 == //
+    public void setUser(User user){
+        this.user = user;
+        user.getRooms().add(this);
+    }
+    public void setItem(Item item){
+        this.item = item;
+        item.getRooms().add(this);
+    }
+    public void setOrder(Orders order){
+        this.order = order;
+        order.setRoom(this);
+    }
 
 }

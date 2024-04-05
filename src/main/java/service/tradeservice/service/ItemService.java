@@ -11,6 +11,7 @@ import service.tradeservice.domain.user.User;
 import service.tradeservice.exception.CancelException;
 import service.tradeservice.exception.AuthRequitedException;
 import service.tradeservice.repository.ItemRepository;
+import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
 
 @Service
@@ -23,6 +24,9 @@ public class ItemService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RoomRepository roomRepository;
 
 
     @Transactional
@@ -37,15 +41,23 @@ public class ItemService {
     @Transactional
     public Book updateBook(Book newBook, Long bookId, Long userId) {
         Book findItem = (Book)itemRepository.findById(bookId).orElseThrow();
+        checkRoomExistValidation(newBook);
         addValidationBook(newBook,userId);
         return Book.updateBook(newBook, findItem);
     }
+
+
 
     @Transactional
     public void cancelBook(Long bookId,Long userId) {
         Book findBook = (Book) itemRepository.findById(bookId).orElseThrow();
         cancelValidationBook(findBook,userId);
         findBook.changeRegisterStatus(RegisterStatus.CANCEL);
+    }
+
+    //이미 만들어진 채팅방이 있는지 확인
+    private void checkRoomExistValidation(Book newBook) {
+        //jpql 작성 로직
     }
 
     /**

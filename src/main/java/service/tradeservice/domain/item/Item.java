@@ -3,13 +3,18 @@ package service.tradeservice.domain.item;
 import jakarta.persistence.*;
 import lombok.Cleanup;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import service.tradeservice.domain.Room;
 import service.tradeservice.exception.NotEnoughStockException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
+@Slf4j
 public abstract class Item {
 
     @Id @GeneratedValue
@@ -18,6 +23,9 @@ public abstract class Item {
 
     @Column(name = "seller_id")
     private Long sellerId;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Room> rooms = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ca")
@@ -54,10 +62,10 @@ public abstract class Item {
         this.registerStatus = registerStatus;
     }
 
-    public int removeStock(int quantity) {
+    public void removeStock(int quantity) {
         if(this.stockQuantity - quantity >= 0) {
             this.stockQuantity -= quantity;
-            return stockQuantity;
+            log.info("재고 감소 완료={}", stockQuantity);
         } else {
             throw new NotEnoughStockException("need more stock");
         }
