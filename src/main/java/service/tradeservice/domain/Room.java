@@ -36,11 +36,10 @@ public class Room {
     @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Orders order;
 
-
     /**
      * status
-     * 0 == VISIBLE
-     * 1 == INVISIBLE
+     * 0 == VISIBLE - TRADING, SELL_CONFIRM, TRADE_COMPㅎ
+     * 1 == INVISIBLE - TRADE_CANCEL
      */
     public static final int VISIBLE = 0;
     public static final int INVISIBLE = 1;
