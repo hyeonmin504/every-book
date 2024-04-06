@@ -62,8 +62,8 @@ public class ItemService {
 
     //이미 만들어진 채팅방이 있는지 확인
     private void checkRoomExistValidation(Book newBook) {
-        List<Item> items = itemRepository.findRoom(newBook);
-        if (items.isEmpty()){
+        List<Room> room = itemRepository.findRoom(newBook);
+        if (room.isEmpty()){
             log.info("findRoom");
             return ;
         }
@@ -83,7 +83,7 @@ public class ItemService {
             throw new AuthRequitedException("수정 권한이 없습니다");
         }
         if (book.getRegisterStatus()== RegisterStatus.COMP){
-            throw new CancelException("판매중인 상태에서만 등록취소가 가능 합니다. 현재 상태 = "+ book.getRegisterStatus());
+            throw new CancelException("상품 판매 완료 상태에서는 등록취소가 불가능 합니다. 현재 상태 = "+ book.getRegisterStatus());
         }
     }
 

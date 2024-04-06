@@ -90,14 +90,17 @@ class ItemServiceTest {
         Book savedItem = itemService.registBook(item, seller.getId());
 
         Room room = roomService.createRoom(buyer.getId(), savedItem.getId(), 3);
-        //then 1 -> 채팅방이 존재하면 상품 취소가 불가능합니다
+        roomService.sellItemConfirm(room.getId());
+        //then 1 -> 판매자가 판매확정한 채팅방이 존재하면 상품 삭제가 불가능합니다.
         assertThrows(CancelException.class, () -> itemService.cancelBook(savedItem.getId(), seller.getId()));
 
         roomService.CancelTradeRoom(buyer.getId(),room.getId());
+        //when 2 -> 판매자가 아닌 사람이 책을 취소한 경우
         //then 2 -> throw new AuthRequitedException("수정 권한이 없습니다");
         assertThrows(AuthRequitedException.class, () -> itemService.cancelBook(savedItem.getId(), buyer.getId()));
 
-        //then 3 -> throw new CancelException("완료 상태에서는 등록 취소가 불가능 합니다. 현재 상태 = "+ book.getRegisterStatus());
+        //when 3 ->
+        //then 3 -> throw new CancelException("상품 판매 상태가 COMP인 경우는 등록 취소가 불가능 합니다. 현재 상태 = "+ book.getRegisterStatus());
         Room room1 = roomService.createRoom(buyer.getId(), savedItem.getId(), 3);
         roomService.sellItemConfirm(room1.getId());
         roomService.buyItemConfirm(room1.getId());
