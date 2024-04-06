@@ -9,7 +9,7 @@ import service.tradeservice.repository.impl.OrderRepositoryCustom;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-//test test
+
     @Autowired
     OrderRepository orderRepository;
 
