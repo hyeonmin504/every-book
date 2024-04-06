@@ -36,9 +36,6 @@ public class RoomService {
     ItemRepository itemRepository;
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    OrderRepository orderRepository;
-
 
     /**
      * @date 2023-19
@@ -170,6 +167,7 @@ public class RoomService {
         log.info("roomDeleteValidation start");
         Room room = roomRepository.findById(roomId).orElseThrow();
 
+        // 판매자가 판매확정을 누른 상태에서 삭제 요청을 할 때
         if (requestUser.getId().equals(room.getItem().getSellerId()) && room.getOrder().getOrderStatus() == Orders.SELL_CONFIRM){
             throw new CancelException("판매자는 거래중일 때 방을 삭제할 수 없습니다.");
         }
