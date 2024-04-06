@@ -24,14 +24,16 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom{
     }
 
     @Override
-    public List<Room> findSameRoom(Long userId, Long itemId) {
+    public List<Room> findSameRoom(Long userId, Long itemId, int orderCount) {
         return em.createQuery("select r from Room r " +
                         "join fetch r.user u " +
                         "join fetch r.item i " +
                         "where u.id=:userId " +
-                        "AND i.id=:itemId", Room.class)
+                        "AND i.id=:itemId " +
+                        "AND i.stockQuantity=:orderCount", Room.class)
                 .setParameter("userId", userId)
                 .setParameter("itemId", itemId)
+                .setParameter("orderCount", orderCount)
                 .getResultList();
     }
 }

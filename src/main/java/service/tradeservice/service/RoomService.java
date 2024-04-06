@@ -13,11 +13,13 @@ import service.tradeservice.domain.user.User;
 import service.tradeservice.exception.AuthRequitedException;
 import service.tradeservice.exception.CancelException;
 import service.tradeservice.exception.ChangeException;
+import service.tradeservice.exception.NotEnoughStockException;
 import service.tradeservice.repository.ItemRepository;
 import service.tradeservice.repository.OrderRepository;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static service.tradeservice.domain.Room.INVISIBLE;
@@ -51,7 +53,7 @@ public class RoomService {
         User buyer = userRepository.findById(buyerId).orElseThrow();
         Item item = itemRepository.findById(itemId).orElseThrow();
 
-        Long existRoomId = createRoomValidation(buyer, itemId);
+        Long existRoomId = createRoomValidation(buyer, itemId, orderCount);
 
         if (existRoomId == null) {
             Orders order = Orders.createOrder(item.getPrice(), orderCount);
@@ -99,6 +101,7 @@ public class RoomService {
         log.info("CancelTradeRoom - RegisterStatus 검증 end");
         //채팅방이 안보이도록 바꾸기
         room.getOrder().changeOrderStatus(Orders.TRADE_CANCEL);
+        room.getOrder().soldDate(LocalDateTime.now());
         room.changeState(Room.INVISIBLE);
         log.info("CancelTradeRoom end");
     }
@@ -179,7 +182,7 @@ public class RoomService {
      * @return true - 판매중인 상품
      *          false - 판매 완료된 상품
      */
-    private Long createRoomValidation(User buyer, Long itemId) {
+    private Long createRoomValidation(User buyer, Long itemId, int orderCount) {
         log.info("createRoomValidation start");
         Item item = itemRepository.findById(itemId).orElseThrow();
         User seller = userRepository.findById(item.getSellerId()).orElseThrow();
@@ -192,8 +195,11 @@ public class RoomService {
         if (seller.getUniversity() != buyer.getUniversity()){
             throw new AuthRequitedException("학교가 서로 다릅니다");
         }
+        if (item.getStockQuantity() < orderCount){
+            throw new NotEnoughStockException("need more stock");
+        }
 
-        List<Room> existRoom = roomRepository.findSameRoom(buyer.getId(), itemId);
+        List<Room> existRoom = roomRepository.findSameRoom(buyer.getId(), itemId, orderCount);
         if (item.getRegisterStatus() == RegisterStatus.SALE){
             log.info("상품 판매중 확인");
             if (!existRoom.isEmpty()){

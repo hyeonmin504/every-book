@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Book;
+import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.item.RegisterStatus;
 import service.tradeservice.domain.user.User;
 import service.tradeservice.exception.CancelException;
@@ -13,6 +15,8 @@ import service.tradeservice.exception.AuthRequitedException;
 import service.tradeservice.repository.ItemRepository;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,10 +28,6 @@ public class ItemService {
 
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    RoomRepository roomRepository;
-
 
     @Transactional
     public Book registBook(Book book, Long userId) {
@@ -51,13 +51,23 @@ public class ItemService {
     @Transactional
     public void cancelBook(Long bookId,Long userId) {
         Book findBook = (Book) itemRepository.findById(bookId).orElseThrow();
+        log.info("cancelValidationBook start");
         cancelValidationBook(findBook,userId);
+        log.info("cancelValidationBook end");
+        log.info("checkRoomExistValidation start");
+        checkRoomExistValidation(findBook);
+        log.info("checkRoomExistValidation end");
         findBook.changeRegisterStatus(RegisterStatus.CANCEL);
     }
 
     //이미 만들어진 채팅방이 있는지 확인
     private void checkRoomExistValidation(Book newBook) {
-        //jpql 작성 로직
+        List<Item> items = itemRepository.findRoom(newBook);
+        if (items.isEmpty()){
+            log.info("findRoom");
+            return ;
+        }
+        throw new CancelException("이미 진행중인 채팅방이 있습니다");
     }
 
     /**
@@ -72,11 +82,9 @@ public class ItemService {
         if (!(book.getSellerId().equals(userId))){
             throw new AuthRequitedException("수정 권한이 없습니다");
         }
-        if (!(book.getRegisterStatus()== RegisterStatus.SALE)){
+        if (book.getRegisterStatus()== RegisterStatus.COMP){
             throw new CancelException("판매중인 상태에서만 등록취소가 가능 합니다. 현재 상태 = "+ book.getRegisterStatus());
         }
-
-
     }
 
     /**

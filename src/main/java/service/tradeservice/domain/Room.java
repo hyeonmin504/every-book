@@ -52,25 +52,25 @@ public class Room {
     protected Room(User user, Item item, Orders orders) {
         this.state = VISIBLE;
         this.createDate = LocalDateTime.now();
-        this.user = user;
-        this.item = item;
-        this.order = orders;
+        setUser(user);
+        setItem(item);
+        setOrder(orders);
     }
 
     public static Room createRoom(User user, Item item, Orders orders) {
-        return new Room(user, item,orders);
+        return new Room(user, item, orders);
     }
 
     // == 연관관계 매서드 == //
-    public void setUser(User user){
+    private void setUser(User user){
         this.user = user;
         user.getRooms().add(this);
     }
-    public void setItem(Item item){
+    private void setItem(Item item){
         this.item = item;
         item.getRooms().add(this);
     }
-    public void setOrder(Orders order){
+    private void setOrder(Orders order){
         this.order = order;
         order.setRoom(this);
     }

@@ -58,4 +58,8 @@ public class Orders {
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    public void soldDate(LocalDateTime soldDate) {
+        this.soldDate = soldDate;
+    }
 }

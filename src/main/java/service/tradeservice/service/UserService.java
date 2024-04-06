@@ -21,7 +21,6 @@ public class UserService {
 
     @Transactional
     public User join(User user) {
-        CheckDuplicateUser(user);
         user.setJoinDay();
         User savedUser = userRepository.save(user);
         log.info("join User={}",user.getId());

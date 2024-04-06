@@ -1,8 +1,10 @@
 package service.tradeservice.domain.item;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Cleanup;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import service.tradeservice.domain.Room;
 import service.tradeservice.exception.NotEnoughStockException;
@@ -15,6 +17,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Item {
 
     @Id @GeneratedValue
@@ -28,7 +31,6 @@ public abstract class Item {
     private List<Room> rooms = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "ca")
     private Category category;
 
     private String itemName;
@@ -69,9 +71,6 @@ public abstract class Item {
         } else {
             throw new NotEnoughStockException("need more stock");
         }
-    }
-
-    public Item() {
     }
 
     public Item(Category category, String itemName, int price, int stockQuantity, LocalDateTime registerDate, RegisterStatus registerStatus) {

@@ -8,5 +8,5 @@ import java.util.List;
 public interface RoomRepositoryCustom {
     public void validationSellerId(Long sellerId);
 
-    public List<Room> findSameRoom(Long userId, Long itemId);
+    public List<Room> findSameRoom(Long userId, Long itemId, int orderCount);
 }
