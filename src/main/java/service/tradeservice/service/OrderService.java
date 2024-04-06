@@ -10,8 +10,10 @@ import service.tradeservice.repository.impl.OrderRepositoryCustom;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
     @Autowired
     OrderRepository orderRepository;
+
 
 
 }
