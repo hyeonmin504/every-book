@@ -26,7 +26,7 @@ public class Content {
     private String content;
 
     public Content(Long userId,Room room, String content) {
-        this.sendUser = userId
+        this.sendUser = userId;
         this.room = room;
         this.sendDate = LocalDateTime.now();
         this.content = content;
