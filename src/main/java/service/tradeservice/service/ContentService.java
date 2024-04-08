@@ -28,7 +28,7 @@ public class ContentService {
     ContentRepository contentRepository;
 
     @Transactional
-    public void saveChat (Long userId, Room room, String data) {
+    public void sendChat (Long userId, Room room, String data) {
         Room findRoom = roomRepository.findById(room.getId()).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
 
@@ -36,6 +36,7 @@ public class ContentService {
         contentRepository.save(content);
     }
 
+    @Transactional
     public List<Content> findChat(Long userId, Long roomId){
         User user = userRepository.findById(userId).orElseThrow();
         Room room = roomRepository.findById(roomId).orElseThrow();
