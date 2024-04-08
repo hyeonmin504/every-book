@@ -6,6 +6,7 @@ import lombok.Cleanup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import service.tradeservice.domain.Favorite;
 import service.tradeservice.domain.Room;
 import service.tradeservice.exception.NotEnoughStockException;
 
@@ -42,6 +43,9 @@ public abstract class Item {
     @Enumerated(EnumType.STRING)
     @Column(name = "register_status")
     private RegisterStatus registerStatus;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Favorite> favorite = new ArrayList<>();
 
     public void setRegisteredItemDate() {
         this.registerDate = LocalDateTime.now();
