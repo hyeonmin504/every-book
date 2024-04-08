@@ -14,9 +14,10 @@ public class ContentRepositoryCustomImpl implements ContentRepositoryCustom{
 
     @Override
     public List<Content> findSendChat(Long roomId) {
-        return em.createQuery("select c from content c " +
+        return em.createQuery("select c from Content c " +
                 "join fetch c.room r " +
-                "r.id=:roomId", Content.class)
+                "where r.id=:roomId", Content.class)
+                .setParameter("roomId", roomId)
                 .getResultList();
     }
 }
