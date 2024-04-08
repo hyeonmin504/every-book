@@ -4,15 +4,17 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import service.tradeservice.domain.item.Item;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Orders {
+@Slf4j
+@Table(name = "orders")
+public class Order {
 
     public static final int TRADING = 1;
     public static final int SELL_CONFIRM = 2;
@@ -49,14 +51,14 @@ public class Orders {
 
     private LocalDateTime soldDate;
 
-    public Orders(int price, int stock, int orderStatus) {
+    public Order(int price, int stock, int orderStatus) {
         this.price = price;
         this.stock = stock;
         this.orderStatus = orderStatus;
     }
 
-    public static Orders createOrder(int price, int quantity) {
-        return new Orders(price, quantity, 1);
+    public static Order createOrder(int price, int quantity) {
+        return new Order(price, quantity, 1);
     }
 
     public void setRoom(Room room) {

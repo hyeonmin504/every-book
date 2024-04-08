@@ -2,15 +2,12 @@ package service.tradeservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import service.tradeservice.domain.Orders;
+import service.tradeservice.domain.Order;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Book;
 import service.tradeservice.domain.item.Category;
@@ -23,7 +20,6 @@ import service.tradeservice.exception.ChangeException;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -70,13 +66,13 @@ class RoomServiceTest {
         //when 1.5 -> 구매자가 먼저 구매 확정을 눌렀을 때
         roomService.buyItemConfirm(room.getId());
         //then 1.5 -> 판매자 부터 눌러야 해서 TRADING 상태 그대로 남음
-        assertThat(room.getOrder().getOrderStatus()).isEqualTo(Orders.TRADING);
+        assertThat(room.getOrder().getOrderStatus()).isEqualTo(Order.TRADING);
 
         //when 2 -> 판매자가 판매 확정을 눌렀을 때
         roomService.sellItemConfirm(room2.getId());
 
         //then 2 -> 만약 orderCount == stockQuantity + SELL_CONFIRM 일 경우 No_STOCK
-        assertThat(room.getOrder().getOrderStatus()).isEqualTo(Orders.SELL_CONFIRM);
+        assertThat(room.getOrder().getOrderStatus()).isEqualTo(Order.SELL_CONFIRM);
         assertThat(room.getItem().getRegisterStatus()).isEqualTo(RegisterStatus.NO_STOCK);
         
         //when 3.5 -> 구매자가 판매 취소를 했을 때
@@ -92,14 +88,14 @@ class RoomServiceTest {
         roomService.buyItemConfirm(room3.getId());
 
         //then 4 -> 채팅방 상태가 거래 완료로 변경, 상품의 상태는 판매 완료로 변경
-        assertThat(room3.getOrder().getOrderStatus()).isEqualTo(Orders.TRADE_COMP);
+        assertThat(room3.getOrder().getOrderStatus()).isEqualTo(Order.TRADE_COMP);
         assertThat(room3.getItem().getRegisterStatus()).isEqualTo(RegisterStatus.COMP);
 
         //when 5 -> 채팅방 삭제를 눌렀을 경우
         roomService.CancelTradeRoom(buyer2.getId(),room3.getId());
 
         //then 3.5 -> 채팅 목록에서 INVISIBLE = 1로 바뀜
-        assertThat(room3.getOrder().getOrderStatus()).isEqualTo(Orders.TRADE_CANCEL);
+        assertThat(room3.getOrder().getOrderStatus()).isEqualTo(Order.TRADE_CANCEL);
 
     }
     
