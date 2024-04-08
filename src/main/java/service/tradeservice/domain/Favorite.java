@@ -25,6 +25,13 @@ public class Favorite {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private RegisterStatus saleStatus;
+    public void setUser(User user) {
+        this.user = user;
+        user.getFavorites().add(this);
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+        item.getFavorite().add(this);
+    }
 }
