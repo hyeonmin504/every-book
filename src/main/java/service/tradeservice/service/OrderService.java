@@ -1,5 +1,6 @@
 package service.tradeservice.service;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,12 @@ import service.tradeservice.domain.Order;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.exception.CancelException;
+import service.tradeservice.exception.ChangeException;
 import service.tradeservice.exception.NotEnoughStockException;
 import service.tradeservice.repository.OrderRepository;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
 public class OrderService {
 
@@ -27,9 +29,13 @@ public class OrderService {
         Order getOrder = orderRepository.findById(orderId).orElseThrow();
         Room getRoom = getOrder.getRoom();
 
+        if (!(getOrder.getOrderStatus() == Order.TRADING)){
+            throw new ChangeException("확정을 하지 않은 상태에서만 변경이 가능합니다");
+        }
 
         int newStock = stockUpdateValidation(getRoom,stock);
         if (newStock == 0) {
+            log.info("newStock={}",newStock);
             roomService.CancelTradeRoom(getRoom.getUser().getId(), getRoom.getId());
             return ;
         }

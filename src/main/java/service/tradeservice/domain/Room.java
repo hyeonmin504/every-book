@@ -8,6 +8,8 @@ import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.user.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +33,9 @@ public class Room {
 
     @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Order order;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Content> contents = new ArrayList<>();
 
     /**
      * status
@@ -70,4 +75,8 @@ public class Room {
         order.setRoom(this);
     }
 
+    private void setContent(Content content) {
+        this.contents.add(content);
+        content.setRoom(this);
+    }
 }

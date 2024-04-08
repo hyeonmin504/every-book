@@ -1,9 +1,7 @@
 package service.tradeservice.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -19,8 +17,20 @@ public class Content {
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Room room;
 
+    private Long sendUser;
+
     private LocalDateTime sendDate;
 
     private String content;
 
+    public Content(Long userId,Room room, String content) {
+        this.sendUser = userId;
+        this.room = room;
+        this.sendDate = LocalDateTime.now();
+        this.content = content;
+    }
+
+    protected void setRoom(Room room) {
+        this.room = room;
+    }
 }
