@@ -48,6 +48,13 @@ public abstract class Item {
         this.registerStatus = service.tradeservice.domain.item.RegisterStatus.SALE;
     }
 
+    public Boolean compareStockQuantity(Item item,int compareStock) {
+        if (item.getStockQuantity() >= compareStock && compareStock > 0 ){
+            return true;
+        }
+        return false;
+    }
+
     public void changeRegisterStatus(RegisterStatus registerStatus){
         this.registerStatus = registerStatus;
     }
