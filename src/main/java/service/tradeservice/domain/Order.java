@@ -45,6 +45,10 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
+    public void changeStock(int changeStock) {
+        this.stock = changeStock;
+    }
+
     private LocalDateTime soldDate;
 
     public Order(int price, int stock, int orderStatus) {
@@ -63,9 +67,5 @@ public class Order {
 
     public void soldDate(LocalDateTime soldDate) {
         this.soldDate = soldDate;
-    }
-
-    public void changeStock(int newStock) {
-        this.stock = newStock;
     }
 }
