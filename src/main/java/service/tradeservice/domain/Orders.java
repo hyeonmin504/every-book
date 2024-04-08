@@ -29,7 +29,7 @@ public class Orders {
 
     private int price;
 
-    private int quantity;
+    private int stock;
 
     /**
      * 1 == 거래 전 - item.registerItem = SALE ( 대화방 생성 ) // 둘다 대화방 삭제 가능
@@ -43,11 +43,15 @@ public class Orders {
         this.orderStatus = orderStatus;
     }
 
+    public void changeStock(int changeStock) {
+        this.stock = changeStock;
+    }
+
     private LocalDateTime soldDate;
 
-    public Orders(int price, int quantity, int orderStatus) {
+    public Orders(int price, int stock, int orderStatus) {
         this.price = price;
-        this.quantity = quantity;
+        this.stock = stock;
         this.orderStatus = orderStatus;
     }
 
