@@ -4,14 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.query.Order;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.user.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Entity
 @Getter
@@ -34,7 +30,7 @@ public class Room {
 
 
     @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Orders order;
+    private Order order;
 
     /**
      * status
@@ -48,7 +44,7 @@ public class Room {
     public void changeState(int state) {
         this.state = state;
     }
-    protected Room(User user, Item item, Orders orders) {
+    protected Room(User user, Item item, Order orders) {
         this.state = VISIBLE;
         this.createDate = LocalDateTime.now();
         setUser(user);
@@ -56,7 +52,7 @@ public class Room {
         setOrder(orders);
     }
 
-    public static Room createRoom(User user, Item item, Orders orders) {
+    public static Room createRoom(User user, Item item, Order orders) {
         return new Room(user, item, orders);
     }
 
@@ -69,7 +65,7 @@ public class Room {
         this.item = item;
         item.getRooms().add(this);
     }
-    private void setOrder(Orders order){
+    private void setOrder(Order order){
         this.order = order;
         order.setRoom(this);
     }

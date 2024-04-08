@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import service.tradeservice.domain.Orders;
+import service.tradeservice.domain.Order;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.item.RegisterStatus;
@@ -15,7 +15,6 @@ import service.tradeservice.exception.CancelException;
 import service.tradeservice.exception.ChangeException;
 import service.tradeservice.exception.NotEnoughStockException;
 import service.tradeservice.repository.ItemRepository;
-import service.tradeservice.repository.OrderRepository;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
 
@@ -53,7 +52,7 @@ public class RoomService {
         Long existRoomId = createRoomValidation(buyer, itemId, orderCount);
 
         if (existRoomId == null) {
-            Orders order = Orders.createOrder(item.getPrice(), orderCount);
+            Order order = Order.createOrder(item.getPrice(), orderCount);
 
             Room room = Room.createRoom(buyer, item, order);
             log.info("방 생성 완료={}", room.getId());
@@ -97,7 +96,7 @@ public class RoomService {
         }
         log.info("CancelTradeRoom - RegisterStatus 검증 end");
         //채팅방이 안보이도록 바꾸기
-        room.getOrder().changeOrderStatus(Orders.TRADE_CANCEL);
+        room.getOrder().changeOrderStatus(Order.TRADE_CANCEL);
         room.getOrder().soldDate(LocalDateTime.now());
         room.changeState(Room.INVISIBLE);
         log.info("CancelTradeRoom end");
@@ -107,14 +106,14 @@ public class RoomService {
     public void sellItemConfirm(Long roomId) {
         log.info("sellItemConfirm start");
         Room room = roomRepository.findById(roomId).orElseThrow();
-        if (room.getOrder().getOrderStatus() == Orders.TRADE_CANCEL){
+        if (room.getOrder().getOrderStatus() == Order.TRADE_CANCEL){
             throw new ChangeException("판매가 취소된 채팅방입니다.");
         }
-        if (room.getOrder().getOrderStatus() == Orders.TRADE_COMP){
+        if (room.getOrder().getOrderStatus() == Order.TRADE_COMP){
             log.info("구매가 성공적으로 끝났습니다");
             return ;
         }
-        if (room.getOrder().getOrderStatus() == Orders.SELL_CONFIRM) {
+        if (room.getOrder().getOrderStatus() == Order.SELL_CONFIRM) {
             log.info("이미 판매를 확정했습니다");
             return ;
         }
@@ -122,12 +121,12 @@ public class RoomService {
          * true = 구매수량과 판매수량이 같은 경우 현재 item의 판매중을 NO_STOCK으로 바꾼다
          * false = 여전히 판매중으로 보여진다
          */
-        if (room.getItem().getStockQuantity() == room.getOrder().getQuantity()){
+        if (room.getItem().getStockQuantity() == room.getOrder().getStock()){
             room.getItem().changeRegisterStatus(RegisterStatus.NO_STOCK);
             log.info("RegisterStatus.NO_STOCK, 재고가 없음 + 판매 확정을 하면서 no_stock변경");
         }
         log.info("RegisterStatus.SALE, 재고가 남음 + 판매 확정함");
-        room.getOrder().changeOrderStatus(Orders.SELL_CONFIRM);
+        room.getOrder().changeOrderStatus(Order.SELL_CONFIRM);
         log.info("판매자가 판매확정 버튼을 눌렀습니다={}",room.getOrder().getOrderStatus());
         log.info("sellItemConfirm end");
     }
@@ -136,24 +135,24 @@ public class RoomService {
     public void buyItemConfirm(Long roomId) {
         log.info("buyItemConfirm start");
         Room room = roomRepository.findById(roomId).orElseThrow();
-        if (room.getOrder().getOrderStatus() == Orders.TRADE_CANCEL) {
+        if (room.getOrder().getOrderStatus() == Order.TRADE_CANCEL) {
             throw new ChangeException("판매가 취소된 채팅방입니다.");
         }
-        if (room.getOrder().getOrderStatus() == Orders.TRADING){
+        if (room.getOrder().getOrderStatus() == Order.TRADING){
             log.info("판매자가 먼저 판매 확정 버튼을 눌러야 합니다={}",room.getOrder().getOrderStatus());
             return ;
         }
-        if (room.getOrder().getOrderStatus() == Orders.TRADE_COMP){
+        if (room.getOrder().getOrderStatus() == Order.TRADE_COMP){
             log.info("이미 구매확정 버튼을 눌렀습니다");
             return ;
         }
-        room.getOrder().changeOrderStatus(Orders.TRADE_COMP);
+        room.getOrder().changeOrderStatus(Order.TRADE_COMP);
         log.info("채팅방 상태를 거래 완료로 변경");
         /**
          * true = 재고가 없는 경우 item 상태를 comp로 바꾼다
          * false = 아직 재고 수량이 남아 있어서, SALE 상태 그대로 간다.
          */
-        room.getItem().removeStock(room.getOrder().getQuantity());
+        room.getItem().removeStock(room.getOrder().getStock());
         if (room.getItem().getRegisterStatus().equals(RegisterStatus.NO_STOCK)){
             room.getItem().changeRegisterStatus(RegisterStatus.COMP);
             log.info("상품의 상태를 판매 완료로 변경");
@@ -168,7 +167,7 @@ public class RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow();
 
         // 판매자가 판매확정을 누른 상태에서 삭제 요청을 할 때
-        if (requestUser.getId().equals(room.getItem().getSellerId()) && room.getOrder().getOrderStatus() == Orders.SELL_CONFIRM){
+        if (requestUser.getId().equals(room.getItem().getSellerId()) && room.getOrder().getOrderStatus() == Order.SELL_CONFIRM){
             throw new CancelException("판매자는 거래중일 때 방을 삭제할 수 없습니다.");
         }
         log.info("roomDeleteValidation end 문제 없음");
@@ -206,7 +205,7 @@ public class RoomService {
                     if (room.getState()==INVISIBLE){
                         log.info("방 상태가 안보이다가 다시 보이도록 바꾼다 + ");
                         room.changeState(VISIBLE);
-                        room.getOrder().changeOrderStatus(Orders.TRADING);
+                        room.getOrder().changeOrderStatus(Order.TRADING);
                         return room.getId();
                     }
                 }

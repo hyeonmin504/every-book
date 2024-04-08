@@ -88,4 +88,11 @@ public abstract class Item {
         this.stockQuantity = item.stockQuantity;
         //this.image = item.image;
     }
+
+    public boolean compareStockQuantity(Item getItem, int compareStock) {
+        if (getItem.getStockQuantity() >= compareStock && compareStock >= 0) {
+            return true;
+        }
+        return false;
+    }
 }

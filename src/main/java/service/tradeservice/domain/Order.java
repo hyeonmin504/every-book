@@ -4,15 +4,17 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import service.tradeservice.domain.item.Item;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Orders {
+@Slf4j
+@Table(name = "orders")
+public class Order {
 
     public static final int TRADING = 1;
     public static final int SELL_CONFIRM = 2;
@@ -29,7 +31,7 @@ public class Orders {
 
     private int price;
 
-    private int quantity;
+    private int stock;
 
     /**
      * 1 == 거래 전 - item.registerItem = SALE ( 대화방 생성 ) // 둘다 대화방 삭제 가능
@@ -45,14 +47,14 @@ public class Orders {
 
     private LocalDateTime soldDate;
 
-    public Orders(int price, int quantity, int orderStatus) {
+    public Order(int price, int stock, int orderStatus) {
         this.price = price;
-        this.quantity = quantity;
+        this.stock = stock;
         this.orderStatus = orderStatus;
     }
 
-    public static Orders createOrder(int price, int quantity) {
-        return new Orders(price, quantity, 1);
+    public static Order createOrder(int price, int quantity) {
+        return new Order(price, quantity, 1);
     }
 
     public void setRoom(Room room) {
@@ -61,5 +63,9 @@ public class Orders {
 
     public void soldDate(LocalDateTime soldDate) {
         this.soldDate = soldDate;
+    }
+
+    public void changeStock(int newStock) {
+        this.stock = newStock;
     }
 }
