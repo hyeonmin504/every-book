@@ -28,7 +28,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return em.createQuery("select r from Item i " +
                 "join i.rooms r " +
                 "join r.order o " +
-                "where o.orderStatus=2", Room.class)
+                "where o.order" +
+                        "Status=2", Room.class)
                 .getResultList();
     }
 }
