@@ -25,6 +25,11 @@ public class Favorite {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Favorite(Item item, User user) {
+        this.item = item;
+        this.user = user;
+    }
+
     public void setUser(User user) {
         this.user = user;
         user.getFavorites().add(this);
