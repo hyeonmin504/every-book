@@ -7,16 +7,17 @@ import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
-public class FavoriteRepositoryCustomImpl implements FavoriteRepositoryCustom{
+public class FavoriteRepositoryCustomImpl implements  FavoriteRepositoryCustom{
     @Autowired
     EntityManager em;
     @Override
-    public List<Item> findByUserId(Long userId) {
-        return em.createQuery("select i from Favorite f " +
+    public List<Favorite> findItemsByUserId(Long userId) {
+        return em.createQuery("select f from Favorite f " +
                         "join fetch f.user u " +
                         "join fetch f.item i " +
-                        "where u.id=:userId ", Item.class)
+                        "where u.id=:userId ", Favorite.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
@@ -24,12 +25,12 @@ public class FavoriteRepositoryCustomImpl implements FavoriteRepositoryCustom{
     @Override
     public Favorite findByUserIdAndItemId(Long userId, Long itemId) {
         return em.createQuery("select f from Favorite f " +
-                "join fetch f.user u " +
-                "join fetch f.item i" +
-                "where u.id=:userId " +
-                "And i.id=:itemId", Favorite.class)
+                        "join fetch f.user u " +
+                        "join fetch f.item i " +
+                        "where u.id=:userId " +
+                        "And i.id=:itemId", Favorite.class)
                 .setParameter("userId", userId)
-                .setParameter("item", itemId)
+                .setParameter("itemId", itemId)
                 .getSingleResult();
     }
 }

@@ -46,8 +46,6 @@ public class ItemService {
         return Book.updateBook(newBook, findItem);
     }
 
-
-
     @Transactional
     public void cancelBook(Long bookId,Long userId) {
         Book findBook = (Book) itemRepository.findById(bookId).orElseThrow();

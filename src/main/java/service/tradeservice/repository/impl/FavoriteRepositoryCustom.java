@@ -6,7 +6,7 @@ import service.tradeservice.domain.item.Item;
 import java.util.List;
 
 public interface FavoriteRepositoryCustom {
-    public List<Item> findByUserId(Long userId);
+    public List<Favorite> findItemsByUserId(Long userId);
 
     public Favorite findByUserIdAndItemId(Long userId, Long itemId);
 }
