@@ -1,37 +1,42 @@
 package service.tradeservice.service;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import service.tradeservice.domain.Orders;
+import service.tradeservice.domain.Order;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.exception.CancelException;
+import service.tradeservice.exception.ChangeException;
+import service.tradeservice.exception.NotEnoughStockException;
 import service.tradeservice.repository.OrderRepository;
-import service.tradeservice.repository.RoomRepository;
-import service.tradeservice.repository.impl.OrderRepositoryCustom;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Slf4j
 public class OrderService {
 
     @Autowired
     OrderRepository orderRepository;
     @Autowired
-    RoomService RoomService;
+    RoomService roomService;
 
     @Transactional
     public void updateStock(Long orderId, int stock) {
-        Orders getOrder = orderRepository.findById(orderId).orElseThrow();
+        Order getOrder = orderRepository.findById(orderId).orElseThrow();
         Room getRoom = getOrder.getRoom();
 
+        if (!(getOrder.getOrderStatus() == Order.TRADING)){
+            throw new ChangeException("확정을 하지 않은 상태에서만 변경이 가능합니다");
+        }
 
         int newStock = stockUpdateValidation(getRoom,stock);
         if (newStock == 0) {
-            RoomService.CancelTradeRoom(getRoom.getUser().getId(), getRoom.getId());
+            log.info("newStock={}",newStock);
+            roomService.CancelTradeRoom(getRoom.getUser().getId(), getRoom.getId());
             return ;
         }
         getOrder.changeStock(newStock);
@@ -48,7 +53,7 @@ public class OrderService {
             log.info("compareStock={}",compareStock);
             return compareStock;
         }
-        throw new CancelException("재고 수량을 참고하고 구매 수량을 정해주세요");
+        throw new NotEnoughStockException("재고 수량을 참고해서 수량을 변경해주세요");
     }
 
 
