@@ -21,10 +21,13 @@ public class UserService {
 
     @Transactional
     public User join(User user) {
-        user.setJoinDay();
         User savedUser = userRepository.save(user);
         log.info("join User={}",user.getId());
         return savedUser;
+    }
+
+    public User login(String email,String password) {
+        return userRepository.findByEmailAndPassword(email, password);
     }
 
 
