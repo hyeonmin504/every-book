@@ -2,6 +2,7 @@ package service.tradeservice.domain.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import service.tradeservice.domain.Favorite;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id @GeneratedValue
@@ -42,9 +43,11 @@ public class User {
         this.university = university;
         this.email = email;
         this.password = password;
+        this.joinDate = LocalDateTime.now();
     }
 
-    public void setJoinDay() {
-        this.joinDate = LocalDateTime.now();
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 }
