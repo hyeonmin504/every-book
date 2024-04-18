@@ -14,4 +14,6 @@ public class LoginForm {
 
     @NotEmpty
     private String password;
+
+    private String nickName;
 }
