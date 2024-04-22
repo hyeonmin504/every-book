@@ -21,10 +21,14 @@ public class BookInfoForm {
     private String nickName;
 
     private Category category;
-
+    @NotNull
     private int sellerSoldItemCount;
 
     private University sellerUniv;
+    @NotNull
+    private int writtenStatus;
+    @NotNull
+    private int bookStatus;
 
     public BookInfoForm() {
     }
