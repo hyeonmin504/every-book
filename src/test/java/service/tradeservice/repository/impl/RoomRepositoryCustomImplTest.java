@@ -30,7 +30,7 @@ class RoomRepositoryCustomImplTest {
     @Test
     public void findRoom() throws Exception {
         User user = new User("hy_min", University.SAMYOOK,"hyunmin504@naver.com", "hoon0504~");
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 ,"저자", "출판사","20240402",2, 2);
 
         //when
         User savedUser = userRepository.save(user);

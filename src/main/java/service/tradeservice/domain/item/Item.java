@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import service.tradeservice.domain.Favorite;
 import service.tradeservice.domain.Room;
+import service.tradeservice.domain.user.User;
 import service.tradeservice.exception.NotEnoughStockException;
 
 import java.time.LocalDateTime;
@@ -64,6 +65,7 @@ public abstract class Item {
     }
 
     public void setSeller(Long seller) {
+
         this.sellerId = seller;
     }
 
@@ -84,13 +86,13 @@ public abstract class Item {
         }
     }
 
-    public Item(Category category, String itemName, int price, int stockQuantity, LocalDateTime registerDate, RegisterStatus registerStatus) {
+    public Item(Category category, String itemName, int price, int stockQuantity) {
         this.category = category;
         this.itemName = itemName;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.registerDate = registerDate;
-        this.registerStatus = registerStatus;
+        this.registerDate = LocalDateTime.now();
+        this.registerStatus = RegisterStatus.SALE;
     }
 
     public void updateItemInfo(Item item) {

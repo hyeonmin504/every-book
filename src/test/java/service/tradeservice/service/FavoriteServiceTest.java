@@ -50,7 +50,7 @@ class FavoriteServiceTest {
         User buyer = userService.join(user1);
         User seller = userService.join(user2);
 
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
 
         Book savedItem = itemService.registBook(item, seller.getId());
 

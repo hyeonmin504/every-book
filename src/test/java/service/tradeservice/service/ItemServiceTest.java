@@ -45,13 +45,14 @@ class ItemServiceTest {
     public void updateBook() throws Exception {
         //given
         User user = new User("hy_min", University.SAMYOOK,"hyunmin504@naver.com", "hoon0504~");
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 ,LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
 
         //when
         User savedUser = userService.join(user);
         Book savedItem = itemService.registBook(item, savedUser.getId());
 
-        Book newItem = new Book(Category.BOOK,"책 이름",20000,2 ,LocalDateTime.now(), RegisterStatus.COMP, "저자", "출판사","20240402",2, 2);
+        Book newItem = new Book(Category.BOOK,"책 이름",20000,2 , "저자", "출판사","20240402",2, 2);
+
         User findUser = userRepository.findById(savedUser.getId()).orElseThrow();
         Book book = itemService.updateBook(newItem, savedItem.getId(), findUser.getId());
 
@@ -67,7 +68,7 @@ class ItemServiceTest {
         //given
         User user = new User("hy_min", University.SAMYOOK,"hyunmin504@naver.com", "hoon0504~");
         User user2 = new User("hy_min2", University.SAMYOOK,"hyunmin5047@naver.com", "hoon0504~");
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 ,LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
 
         //when
         User savedUser = userService.join(user);
@@ -82,7 +83,7 @@ class ItemServiceTest {
         //given
         User user = new User("hy_min", University.SAMYOOK,"hyunmin504@naver.com", "hoon0504~");
         User user2 = new User("hy_min2", University.SAMYOOK,"hyunmin5047@naver.com", "hoon0504~");
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 ,LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
 
         //when
         User seller= userService.join(user);

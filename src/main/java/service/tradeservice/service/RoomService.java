@@ -159,6 +159,11 @@ public class RoomService {
             return ;
         }
         room.getItem().changeRegisterStatus(RegisterStatus.SALE);
+
+        log.info("판매자 판매 횟수 증가");
+        User seller = userRepository.findById(room.getItem().getSellerId()).orElseThrow();
+        seller.changeSoldItemCount();
+
         log.info("구매가 성공적으로 끝났습니다={}, 상품의 상태는 판매중",room.getOrder().getOrderStatus());
     }
 

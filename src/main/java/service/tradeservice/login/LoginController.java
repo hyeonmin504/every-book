@@ -35,7 +35,7 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     public String login(@Validated @ModelAttribute("loginForm") LoginForm form,
-                        BindingResult bindingResult,
+                        BindingResult bindingResult,RedirectAttributes redirectAttributes,
                         HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
@@ -54,8 +54,9 @@ public class LoginController {
         HttpSession session = request.getSession();
         //세션에 로그인 회원 정보 보관
         session.setAttribute("LOGIN_MEMBER", form);
-
-        return "redirect:/page/main";
+        User user = userRepository.findByEmailAndPassword(form.getEmail(), form.getPassword());
+        redirectAttributes.addAttribute("userId",user.getId());
+        return "redirect:/page/main/{userId}";
     }
 
     @GetMapping(value = "/user/add")
@@ -71,13 +72,23 @@ public class LoginController {
                          BindingResult bindingResult, Model model,
                          RedirectAttributes redirectAttributes) {
 
+        User user = new User(form.getNickName(),form.getUniversity(),form.getEmail(),form.getPassword());
+
+        if (form.getUniversity() == null) {
+            bindingResult.rejectValue("university",null,null, "학교를 선택해주세요");
+        }
+        if (userService.checkDuplicateUser(user).equals("sameNick")) {
+            bindingResult.rejectValue("nickName",null,null, "이미 존재하는 닉네임 입니다");
+        }
+        if (userService.checkDuplicateUser(user).equals("sameEmail")){
+            bindingResult.rejectValue("email",null,null, "이미 가입된 계정입니다");
+        }
         if (bindingResult.hasErrors()) {
             log.info("hasErrors");
             model.addAttribute("university", SignUpForm.university());
             return "user/addUser";
         }
 
-        User user = new User(form.getNickName(),form.getUniversity(),form.getEmail(),form.getPassword());
         User join = userService.join(user);
         redirectAttributes.addAttribute("itemId",join.getId());
         redirectAttributes.addAttribute("status", true);
