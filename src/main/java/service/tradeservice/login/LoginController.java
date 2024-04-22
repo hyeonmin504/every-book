@@ -1,5 +1,8 @@
 package service.tradeservice.login;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +30,14 @@ public class LoginController {
     @GetMapping(value = "/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
         log.info("login,GetMapping");
-        //User user1 = userRepository.findById(id).orElseThrow();
-        //form.setEmail(user1.getEmail());
         return "login/loginForm";
     }
 
     @PostMapping(value = "/login")
     public String login(@Validated @ModelAttribute("loginForm") LoginForm form,
-                        BindingResult bindingResult) {
+                        BindingResult bindingResult,RedirectAttributes redirectAttributes,
+                        HttpServletRequest request) {
+
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
         }
@@ -43,14 +46,17 @@ public class LoginController {
             bindingResult.rejectValue(null,"loginFail",null, "아이디 또는 비밀번호가 맞지 않습니다");
             return "login/loginForm";
         }
+        log.info("회원 존재");
+        form.setNickName(login.getNickName());
 
-        return "redirect:/page/main";
-    }
-
-    @GetMapping(value = "/page/main")
-    public String main() {
-        log.info("login/main");
-        return "/page/main";
+        //로그인 성공 처리
+        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+        HttpSession session = request.getSession();
+        //세션에 로그인 회원 정보 보관
+        session.setAttribute("LOGIN_MEMBER", form);
+        User user = userRepository.findByEmailAndPassword(form.getEmail(), form.getPassword());
+        redirectAttributes.addAttribute("userId",user.getId());
+        return "redirect:/page/main/{userId}";
     }
 
     @GetMapping(value = "/user/add")
@@ -66,17 +72,39 @@ public class LoginController {
                          BindingResult bindingResult, Model model,
                          RedirectAttributes redirectAttributes) {
 
+        User user = new User(form.getNickName(),form.getUniversity(),form.getEmail(),form.getPassword());
+
+        if (form.getUniversity() == null) {
+            bindingResult.rejectValue("university",null,null, "학교를 선택해주세요");
+        }
+        if (userService.checkDuplicateUser(user).equals("sameNick")) {
+            bindingResult.rejectValue("nickName",null,null, "이미 존재하는 닉네임 입니다");
+        }
+        if (userService.checkDuplicateUser(user).equals("sameEmail")){
+            bindingResult.rejectValue("email",null,null, "이미 가입된 계정입니다");
+        }
         if (bindingResult.hasErrors()) {
             log.info("hasErrors");
             model.addAttribute("university", SignUpForm.university());
             return "user/addUser";
         }
 
-        User user = new User(form.getNickName(),form.getUniversity(),form.getEmail(),form.getPassword());
         User join = userService.join(user);
         redirectAttributes.addAttribute("itemId",join.getId());
         redirectAttributes.addAttribute("status", true);
 
         return "redirect:/login";
     }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        log.info("logout");
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
+    }
+
+
 }

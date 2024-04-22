@@ -38,12 +38,19 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Favorite> favorites = new ArrayList<>();
 
+    private int soldItemCount;
+
+    public void changeSoldItemCount() {
+        this.soldItemCount++;
+    }
+
     public User(String nickName, University university, String email, String password) {
         this.nickName = nickName;
         this.university = university;
         this.email = email;
         this.password = password;
         this.joinDate = LocalDateTime.now();
+        this.soldItemCount = 0;
     }
 
     public User(String email, String password) {

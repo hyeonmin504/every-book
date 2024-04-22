@@ -26,8 +26,8 @@ public class Book extends Item {
     private int bookStatus;
     private int writtenStatus;
 
-    public Book(Category category, String itemName, int price, int stockQuantity, LocalDateTime registerDate, RegisterStatus status, String author, String publisher, String publisherDate, int bookStatus, int writtenStatus) {
-        super(category, itemName, price, stockQuantity, registerDate, status);
+    public Book(Category category, String itemName, int price, int stockQuantity, String author, String publisher, String publisherDate, int bookStatus, int writtenStatus) {
+        super(category, itemName, price, stockQuantity);
         this.author = author;
         this.publisher = publisher;
         this.publisherDate = publisherDate;
@@ -35,7 +35,7 @@ public class Book extends Item {
         this.writtenStatus = writtenStatus;
     }
 
-    public void createBook(String author, String publisher, String publisherDate, int bookStatus, int writtenStatus, int stock, Category category, String itemName, int price, int stockQuantity, RegisterStatus status) {
+    public void createBook(String author, String publisher, String publisherDate, int bookStatus, int writtenStatus, Category category, String itemName, int price, int stockQuantity, RegisterStatus status) {
         this.author = author;
         this.publisher = publisher;
         this.publisherDate = publisherDate;
