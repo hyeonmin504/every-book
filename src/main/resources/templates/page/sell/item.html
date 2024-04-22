@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .container {
+        max-width: 560px;
+    }
+    table {
+        width: 100%;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>상품 정보</h2>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <th>카테고리</th>
+        <td th:text="${form.category.getCategory}"></td>
+      </tr>
+      <tr>
+        <th>상품 번호</th>
+        <td th:text="${form.id}"></td>
+      </tr>
+      <tr>
+        <th>상품명</th>
+        <td th:text="${form.itemName}"></td>
+      </tr>
+      <tr>
+        <th>가격</th>
+        <td th:text="${form.price}"></td>
+      </tr>
+      <tr>
+        <th>재고 수량</th>
+        <td th:text="${form.stockQuantity}"></td>
+      </tr>
+      <tr>
+        <th>판매자</th>
+        <td th:text="${form.nickName}"></td>
+      </tr>
+      <tr>
+        <th>판매자의 학교</th>
+        <td th:text="${form.sellerUniv.getUniversity}"></td>
+      </tr>
+      <tr>
+        <th>판매자의 거래 횟수</th>
+        <td th:text="${form.sellerSoldItemCount}"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

@@ -21,21 +21,27 @@ public class UserService {
 
     @Transactional
     public User join(User user) {
-        user.setJoinDay();
         User savedUser = userRepository.save(user);
         log.info("join User={}",user.getId());
         return savedUser;
     }
 
+    public User login(String email,String password) {
+        return userRepository.findByEmailAndPassword(email, password);
+    }
 
-    private void CheckDuplicateUser(User user) {
+
+    public String checkDuplicateUser(User user) {
         List<User> findEmail = userRepository.findByEmail(user.getEmail());
         List<User> findName = userRepository.findByNickName(user.getNickName());
         if (!findName.isEmpty()){
-            throw new DuplicationUserException("이미 존재하는 닉네임입니다");
+            log.info("이미 존재하는 닉네임입니다");
+            return "sameNick";
         }
         if (!findEmail.isEmpty()){
-            throw new DuplicationUserException("이미 존재하는 회원입니다.");
+            log.info("이미 존재하는 회원입니다.");
+            return "sameEmail";
         }
+        return "ok";
     }
 }
