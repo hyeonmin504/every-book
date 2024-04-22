@@ -43,8 +43,8 @@ class RoomServiceTest {
         User user1 = new User("hy_min", University.SAMYOOK,"hyunmin504@naver.com", "12341234");
         User user2 = new User("hy_min2", University.SAMYOOK,"hyunmin504@naver2.com", "12341234");
         User user3 = new User("hy_min3", University.SAMYOOK,"hyunmin504@naver3.com", "12341234");
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
-        Book item2 = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
+        Book item2 = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
 
         User buyer = userService.join(user1);
         User seller = userService.join(user2);
@@ -110,9 +110,9 @@ class RoomServiceTest {
         User seller = userService.join(user2);
         User seller2 = userService.join(user3);
 
-        Book item = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
-        Book item2 = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
-        Book item3 = new Book(Category.BOOK,"책 이름",10000,3 , LocalDateTime.now(), RegisterStatus.SALE, "저자", "출판사","20240402",2, 2);
+        Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
+        Book item2 = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
+        Book item3 = new Book(Category.BOOK,"책 이름",10000,3 ,  "저자", "출판사","20240402",2, 2);
 
         Book savedItem = itemService.registBook(item, seller.getId());
 

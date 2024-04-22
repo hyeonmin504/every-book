@@ -48,7 +48,8 @@
         <div>
             <div> university </div>
             <div th:each="type : ${university}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{university}" th:value="${type.name()}" class="form-check-input">
+                <input type="radio" th:field="*{university}" th:value="${type.name()}" class="form-check-input"
+                       th:errorclass="field-error">
                 <label th:for="${#ids.prev('university')}"
                        th:text="${type.university}" class="form-check-label">
                     university
@@ -64,8 +65,8 @@
                 </button>
             </div>
             <div class="col">
-                <button class="w-100 btn btn-secondary btn-1g"
-                        onclick="location.href='item.html'"
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='main.html'"
                         th:onclick="|location.href='@{/}'|"
                         type="button">취소</button>
             </div>
