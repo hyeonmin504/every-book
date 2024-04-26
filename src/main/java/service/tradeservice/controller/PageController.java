@@ -8,12 +8,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.tradeservice.controller.item.RegistrationItemForm;
+import service.tradeservice.controller.room.RoomListForm;
+import service.tradeservice.domain.Content;
+import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.user.University;
 import service.tradeservice.domain.user.User;
 import service.tradeservice.login.LoginForm;
+import service.tradeservice.repository.ContentRepository;
 import service.tradeservice.repository.ItemRepository;
+import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
+import service.tradeservice.service.ContentService;
+import service.tradeservice.service.RoomService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +34,12 @@ public class PageController {
     UserRepository userRepository;
     @Autowired
     ItemRepository itemRepository;
+    @Autowired
+    ContentService contentService;
+    @Autowired
+    RoomRepository roomRepository;
+    @Autowired
+    RoomService roomService;
 
     @GetMapping(value = "/main/{userId}")
     public String loginMainPage(@SessionAttribute(name = "LOGIN_MEMBER",required = false) LoginForm loginForm, Model model,
@@ -63,12 +76,6 @@ public class PageController {
     public String myPage() {
         log.info("getMapping myPage");
         return "/page/myPage";
-    }
-
-    @GetMapping("/roomPage/{userId}")
-    public String roomPage() {
-        log.info("getMapping roomPage");
-        return "/page/roomPage";
     }
 
     @GetMapping("/items/{userId}")

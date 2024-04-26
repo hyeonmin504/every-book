@@ -5,10 +5,12 @@ import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import service.tradeservice.domain.Favorite;
 import service.tradeservice.domain.Room;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,8 @@ public class User {
     private String email;
 
     private String password;
-    private LocalDateTime joinDate;
+
+    private String joinDate;
 
     @OneToMany(mappedBy = "user")
     private List<Room> rooms = new ArrayList<>();
@@ -49,7 +52,7 @@ public class User {
         this.university = university;
         this.email = email;
         this.password = password;
-        this.joinDate = LocalDateTime.now();
+        this.joinDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         this.soldItemCount = 0;
     }
 
