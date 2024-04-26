@@ -14,6 +14,9 @@ import java.util.List;
 
 @Data
 public class RegistrationBookForm {
+    /**
+     * 책을 등록할 때 사용하는 폼
+     */
 
     @NotEmpty
     private String itemName;

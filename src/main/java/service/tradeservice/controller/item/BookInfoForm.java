@@ -8,6 +8,9 @@ import service.tradeservice.domain.user.University;
 
 @Data
 public class BookInfoForm {
+    /**
+     * 책 정보 폼
+     */
 
     @NotNull
     private Long id;

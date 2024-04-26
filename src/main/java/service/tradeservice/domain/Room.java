@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.user.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +22,10 @@ public class Room {
     @Column(name = "room_id")
     private Long id;
 
-    private LocalDateTime createDate;
+    private String createDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "buyer_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -51,7 +53,7 @@ public class Room {
     }
     protected Room(User user, Item item, Order orders) {
         this.state = VISIBLE;
-        this.createDate = LocalDateTime.now();
+        this.createDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         setUser(user);
         setItem(item);
         setOrder(orders);
