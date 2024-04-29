@@ -8,7 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import service.tradeservice.controller.room.chat.ChatForm;
+import service.tradeservice.chat.ChatForm;
+import service.tradeservice.chat.ChatMessageForm;
 import service.tradeservice.domain.Content;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.user.User;
@@ -73,15 +74,14 @@ public class RoomController {
     //roomList->Room 선택-> 채팅 페이지
     @GetMapping("/{userId}/chatPage/{roomId}")
     public String chatPage(@PathVariable Long userId, @PathVariable Long roomId, Model model,
-                           HttpServletRequest request) {
+                           HttpServletRequest request,
+                           @ModelAttribute ChatMessageForm form) {
         List<Content> contents = contentService.findChat(userId, roomId);
         List<ChatForm> chatForms = new ArrayList<>();
 
         for (Content content : contents) {
             chatForms.add(new ChatForm(content.getSendUser(),content.getContent(),content.getSendDate(),content.getRoom().getId()));
         }
-
-        ReceiveChatForm form = new ReceiveChatForm();
 
         model.addAttribute("chats",chatForms);
         model.addAttribute("userId",userId);
@@ -94,17 +94,18 @@ public class RoomController {
     }
 
     @PostMapping("/{userId}/chatPage/{roomId}")
-    public String chatSend(@ModelAttribute ReceiveChatForm receiveChatForm,
-                           @PathVariable Long userId, @PathVariable Long roomId,
+    public String chatSend(@PathVariable Long userId, @PathVariable Long roomId,
+                           @ModelAttribute ChatMessageForm form,
                            RedirectAttributes redirectAttributes,
                            @SessionAttribute(name = "CHAT_INFO",required = false) List<ChatForm> chatForms) {
         List<Content> contents = contentService.findChat(userId, roomId);
         Room room = roomRepository.findById(roomId).orElseThrow();
 
-        contentService.sendChat(userId,room,receiveChatForm.getData());
         for (Content content : contents) {
             chatForms.add(new ChatForm(content.getSendUser(),content.getContent(),content.getSendDate(),content.getRoom().getId()));
         }
+
+        contentService.sendChat(userId,room,form.getMessage());
 
         redirectAttributes.addAttribute("userId",userId);
         redirectAttributes.addAttribute("roomId",roomId);

@@ -1,6 +1,6 @@
 package service.tradeservice.service;
 
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,11 @@ import service.tradeservice.repository.ItemRepository;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
-public class ContentService {
+public class ContentService{
 
     @Autowired
     RoomRepository roomRepository;
