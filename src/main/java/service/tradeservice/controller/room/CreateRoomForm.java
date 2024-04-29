@@ -1,4 +1,4 @@
-package service.tradeservice.controller.room.chat;
+package service.tradeservice.controller.room;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

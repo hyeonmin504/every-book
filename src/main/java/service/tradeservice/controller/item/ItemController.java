@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import service.tradeservice.controller.room.chat.CreateRoomForm;
+import service.tradeservice.controller.room.CreateRoomForm;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Book;
 import service.tradeservice.domain.item.Category;

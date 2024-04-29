@@ -1,4 +1,4 @@
-package service.tradeservice.controller.room.chat;
+package service.tradeservice.chat;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -8,17 +8,17 @@ import lombok.Data;
 public class ChatForm {
 
     @NotNull
-    private Long sendUser;
+    private Long sender;
     @NotEmpty
-    private String content;
+    private String message;
     @NotEmpty
     private String time;
     @NotNull
     private Long roomId;
 
-    public ChatForm(Long sendUser, String content, String time, Long roomId) {
-        this.sendUser = sendUser;
-        this.content = content;
+    public ChatForm(Long sender, String message, String time, Long roomId) {
+        this.sender = sender;
+        this.message = message;
         this.time = time;
         this.roomId = roomId;
     }
