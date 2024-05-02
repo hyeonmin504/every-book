@@ -10,7 +10,8 @@ import service.tradeservice.repository.UserRepository;
 import java.time.LocalDateTime;
 
 @Data
-public class RoomListForm {
+public class
+RoomListForm {
     /**
      * 채팅방 리스트에서 보이는 폼
      */
@@ -39,6 +40,12 @@ public class RoomListForm {
     private int price;
 
     public RoomListForm() {
+    }
+
+    public RoomListForm(int orderStatus, Long id, User user, String sendDate, String content, String itemName, int price) {
+        transformStatus(orderStatus);
+        setContentInfo(id, user, sendDate, content);
+        setItemInfo(itemName, price);
     }
 
     public void transformStatus(int status){

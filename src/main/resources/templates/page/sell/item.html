@@ -58,8 +58,8 @@
     </div>
     <form action="book.html" th:action th:object="${roomForm}" method="post">
       <div th:if="${#fields.hasGlobalErrors()}">
-        <p class="field-error" th:each="err : ${#fields.globalErrors}"
-           th:text="${err}">전체 오류 메시지</p>
+        <div th:field="*{email}" class="form-control" th:errorclass="field-error">오류<div class="field-error" th:errors="*{stock}" /> 메시지</div>
+
       </div>
       <div class="row">
         <div class="col">

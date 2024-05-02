@@ -11,4 +11,5 @@ public interface RoomRepositoryCustom {
     public List<Room> findSameRoom(User user, Item item, int orderCount);
 
     public List<Room> findByUser(Long userId);
+    public List<Room> findBySellerRoom(Long sellerId);
 }

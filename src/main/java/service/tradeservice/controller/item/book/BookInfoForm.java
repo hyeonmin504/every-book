@@ -1,5 +1,7 @@
-package service.tradeservice.controller.item;
+package service.tradeservice.controller.item.book;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -23,6 +25,7 @@ public class BookInfoForm {
     @NotEmpty
     private String nickName;
 
+    @Enumerated(EnumType.STRING)
     private Category category;
     @NotNull
     private int sellerSoldItemCount;

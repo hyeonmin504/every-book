@@ -96,9 +96,11 @@ public abstract class Item {
         this.registerStatus = RegisterStatus.SALE;
     }
 
+    public Item(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
     public void updateItemInfo(Item item) {
-        this.itemName = item.itemName;
-        this.price = item.price;
         this.stockQuantity = item.stockQuantity;
         //this.image = item.image;
     }

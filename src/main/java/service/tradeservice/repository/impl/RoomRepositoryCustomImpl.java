@@ -37,13 +37,26 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom{
     @Override
     public List<Room> findByUser(Long userId) {
         return em.createQuery(
-                        "SELECT r FROM Room r " +
-                                "JOIN FETCH r.user u " + // 방과 사용자들을 조인합니다.
-                                "JOIN FETCH r.contents c " + // 방과 콘텐츠들을 조인합니다.
-                                "WHERE u.id = :userId " + // 사용자 ID가 주어진 ID와 일치하는지 확인합니다.
-                                "AND c.sendDate = " + // 방의 마지막으로 저장된 콘텐츠의 LocalDateTime
-                                "(SELECT MAX(c2.sendDate) FROM Content c2 WHERE c2.room = r)", Room.class)
+                        "select r from Room r " +
+                                "join fetch r.user u " + // 방과 사용자들을 조인합니다.
+                                "join fetch r.contents c " + // 방과 콘텐츠들을 조인합니다.
+                                "where u.id = :userId " + // 사용자 ID가 주어진 ID와 일치하는지 확인합니다.
+                                "and c.sendDate = " + // 방의 마지막으로 저장된 콘텐츠의 LocalDateTime
+                                "(select max(c2.sendDate) from Content c2 where c2.room = r)", Room.class)
                 .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Room> findBySellerRoom(Long sellerId) {
+        return em.createQuery(
+                "select r from Room r " +
+                        "join fetch r.item i " +
+                        "join fetch r.contents c " +
+                        "where i.sellerId=:sellerId " +
+                        "and c.sendDate = " +
+                        "(select max(c2.sendDate) from Content c2 where c2.room = r)", Room.class)
+                .setParameter("sellerId", sellerId)
                 .getResultList();
     }
 }

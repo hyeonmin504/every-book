@@ -1,14 +1,18 @@
-package service.tradeservice.chat;
+package service.tradeservice.controller.chat;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
 public class ChatForm {
 
     @NotNull
-    private Long sender;
+    private String sender;
     @NotEmpty
     private String message;
     @NotEmpty
@@ -16,7 +20,7 @@ public class ChatForm {
     @NotNull
     private Long roomId;
 
-    public ChatForm(Long sender, String message, String time, Long roomId) {
+    public ChatForm(String sender, String message, String time, Long roomId) {
         this.sender = sender;
         this.message = message;
         this.time = time;

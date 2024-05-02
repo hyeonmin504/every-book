@@ -13,4 +13,6 @@ public interface ContentRepositoryCustom {
 
     public List<Content> findLastChatInfo(Room room, User user);
 
+    List<Content> findLastChatInfoSellerVer(Room room, Long user);
+
 }
