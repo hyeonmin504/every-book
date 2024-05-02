@@ -21,7 +21,8 @@
     <form action="main.html" th:action th:object="${loginForm}" method="post">
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
-               th:text="${err}">전체 오류 메시지</p> </div>
+               th:text="${err}">전체 오류 메시지</p>
+        </div>
         <div>
             <label for="email">email</label>
             <input type="text" id="email" th:field="*{email}" class="form-control"
@@ -29,11 +30,11 @@
             <div class="field-error" th:errors="*{email}" />
         </div>
         <div>
-        <label for="password">비밀번호</label>
-        <input type="password" id="password" th:field="*{password}"
-               class="form-control"
-               th:errorclass="field-error">
-        <div class="field-error" th:errors="*{password}"/>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}"
+                   class="form-control"
+                   th:errorclass="field-error">
+            <div class="field-error" th:errors="*{password}"/>
         </div>
         <hr class="my-4">
         <div class="row">

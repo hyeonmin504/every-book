@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import service.tradeservice.domain.Content;
 import service.tradeservice.domain.Order;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
@@ -35,6 +36,8 @@ public class RoomService {
     ItemRepository itemRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ContentService contentService;
 
     /**
      * @date 2023-19
@@ -46,21 +49,32 @@ public class RoomService {
      */
     @Transactional
     public Room createRoom(Long buyerId, Long itemId, int orderCount){
+        log.info("createRoom start");
         User buyer = userRepository.findById(buyerId).orElseThrow();
         Item item = itemRepository.findById(itemId).orElseThrow();
 
         Long existRoomId = createRoomValidation(buyer, itemId, orderCount);
 
         if (existRoomId == null) {
+            log.info("existRoomId == null, 방 생성");
             Order order = Order.createOrder(item.getPrice(), orderCount);
 
             Room room = Room.createRoom(buyer, item, order);
             log.info("방 생성 완료={}", room.getId());
 
-            return roomRepository.save(room);
+            Room savedRoom = roomRepository.save(room);
+            contentService.sendChat(buyerId,room,"대화를 시작해보세요!");
+
+            return savedRoom;
         }
         log.info("안보이던 방을 다시 보이게 합니다");
         return roomRepository.findById(existRoomId).orElseThrow();
+    }
+
+    @Transactional
+    public List<Room> findAllRoom(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return roomRepository.findByUser(user);
     }
 
 
@@ -201,7 +215,7 @@ public class RoomService {
             throw new NotEnoughStockException("need more stock");
         }
 
-        List<Room> existRoom = roomRepository.findSameRoom(buyer.getId(), itemId, orderCount);
+        List<Room> existRoom = roomRepository.findSameRoom(buyer, item, orderCount);
         if (item.getRegisterStatus() == RegisterStatus.SALE){
             log.info("상품 판매중 확인");
             if (!existRoom.isEmpty()){
@@ -222,4 +236,7 @@ public class RoomService {
         throw new CancelException("이미 판매된 상품이어서 방을 생성할 수 없습니다");
     }
 
+    public List<Room> findAllSellerRoom(Long userId) {
+        return roomRepository.findBySellerRoom(userId);
+    }
 }

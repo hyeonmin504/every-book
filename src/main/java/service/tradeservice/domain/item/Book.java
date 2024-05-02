@@ -35,6 +35,15 @@ public class Book extends Item {
         this.writtenStatus = writtenStatus;
     }
 
+    public Book(int stockQuantity,String author, String publisher, String publisherDate, int bookStatus, int writtenStatus) {
+        super(stockQuantity);
+        this.author = author;
+        this.publisher = publisher;
+        this.publisherDate = publisherDate;
+        this.bookStatus = bookStatus;
+        this.writtenStatus = writtenStatus;
+    }
+
     public void createBook(String author, String publisher, String publisherDate, int bookStatus, int writtenStatus, Category category, String itemName, int price, int stockQuantity, RegisterStatus status) {
         this.author = author;
         this.publisher = publisher;
