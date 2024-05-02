@@ -34,12 +34,6 @@ public class PageController {
     UserRepository userRepository;
     @Autowired
     ItemRepository itemRepository;
-    @Autowired
-    ContentService contentService;
-    @Autowired
-    RoomRepository roomRepository;
-    @Autowired
-    RoomService roomService;
 
     @GetMapping(value = "/main/{userId}")
     public String loginMainPage(@SessionAttribute(name = "LOGIN_MEMBER",required = false) LoginForm loginForm, Model model,
@@ -78,20 +72,5 @@ public class PageController {
         return "/page/myPage";
     }
 
-    @GetMapping("/items/{userId}")
-    public String Items(@PathVariable Long userId, @SessionAttribute(name = "LOGIN_MEMBER",required = false) LoginForm loginForm,
-                        Model model) {
-        model.addAttribute("userId", userId);
 
-        List<Item> all = itemRepository.findMyItem(userId);
-
-        List<RegistrationItemForm> itemForm = new ArrayList<>();
-        for (Item item : all) {
-            User user = userRepository.findById(userId).orElseThrow();
-            itemForm.add(new RegistrationItemForm(item.getId(),item.getItemName(),item.getPrice(),item.getStockQuantity(),user.getNickName(),item.getCategory()));
-        }
-        model.addAttribute("user", loginForm);
-        model.addAttribute("items",itemForm);
-        return "/page/sell/sellPage";
-    }
 }

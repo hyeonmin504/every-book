@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import service.tradeservice.controller.room.RoomListForm;
 import service.tradeservice.domain.Content;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
@@ -15,6 +16,7 @@ import service.tradeservice.repository.ItemRepository;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,7 +37,7 @@ public class ContentService{
         Room findRoom = roomRepository.findById(room.getId()).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
 
-        Content content = new Content(userId, room, data);
+        Content content = new Content(user.getNickName(), room, data);
         contentRepository.save(content);
     }
 
@@ -50,6 +52,27 @@ public class ContentService{
         }
 
         throw new AuthRequitedException("볼 권한이 없습니다");
+    }
+
+    public List<RoomListForm> findAllRoomAtRoomList(Long userId,List<Room> allRoom){
+        List<RoomListForm> forms = new ArrayList<>();
+        for (Room room : allRoom) {
+            User seller = userRepository.findById(room.getItem().getSellerId()).orElseThrow();
+            if (seller.getId().equals(userId)) {
+                Content content = findLastInfoSellerVer(seller.getId(),room.getId());
+                forms.add(new RoomListForm(room.getOrder().getOrderStatus(),room.getId(),seller,content.getSendDate(),content.getContent(),room.getItem().getItemName(),room.getItem().getPrice()));
+            } else if (room.getUser().getId().equals(userId)) {
+                Content content = findLastInfo(userId, room.getId());
+                forms.add(new RoomListForm(room.getOrder().getOrderStatus(),room.getId(),seller,content.getSendDate(),content.getContent(),room.getItem().getItemName(),room.getItem().getPrice()));
+            }
+        }
+        return forms;
+    }
+
+    private Content findLastInfoSellerVer(Long sellerId, Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow();
+        List<Content> lastChatInfo = contentRepository.findLastChatInfoSellerVer(room,sellerId);
+        return lastChatInfo.get(lastChatInfo.size()-1);
     }
 
     public Content findLastInfo(Long buyerId,Long roomId) {

@@ -236,4 +236,7 @@ public class RoomService {
         throw new CancelException("이미 판매된 상품이어서 방을 생성할 수 없습니다");
     }
 
+    public List<Room> findAllSellerRoom(Long userId) {
+        return roomRepository.findBySellerRoom(userId);
+    }
 }

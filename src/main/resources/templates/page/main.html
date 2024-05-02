@@ -39,7 +39,13 @@
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
                     th:onclick="|location.href='@{/page/roomPage/{userId}(userId=${userId})}'|" >
-                채팅방
+                구매 채팅방
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    th:onclick="|location.href='@{/page/roomPage/{userId}/sell(userId=${userId})}'|" >
+                판매 채팅방
             </button>
         </div>
         <div class="col">

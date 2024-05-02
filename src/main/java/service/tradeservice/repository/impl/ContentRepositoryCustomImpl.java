@@ -47,4 +47,17 @@ public class ContentRepositoryCustomImpl implements ContentRepositoryCustom{
                 .setParameter("user",user)
                 .getResultList();
     }
+
+    @Override
+    public List<Content> findLastChatInfoSellerVer(Room room, Long sellerId) {
+        return em.createQuery(
+                "select c from Content c " +
+                        "join fetch c.room r " +
+                        "join fetch r.item i " +
+                        "WHERE c.room =:room " +
+                        "And i.sellerId =:sellerId", Content.class)
+                .setParameter("room",room)
+                .setParameter("sellerId",sellerId)
+                .getResultList();
+    }
 }

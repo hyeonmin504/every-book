@@ -42,7 +42,7 @@
     </div>
     <div>
         <form action="book.html" th:action th:object="${form}" method="post">
-            <input type="text" id="data" th:field="*{message}" class="form-control" th:errorclass="field-error">
+            <input type="text" id="data" th:field="*{message}" class="form-control" th:errorclass="field-error" autofocus>
             <button type="submit">메시지 보내기</button>
         </form>
     </div>
