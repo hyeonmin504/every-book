@@ -17,6 +17,9 @@ import java.util.List;
 
 @Data
 public class RegistrationItemForm {
+    /**
+     * 상품 정보를 간단하게 보여주는 폼
+     */
 
     @NotNull
     private Long id;

@@ -12,6 +12,7 @@ import service.tradeservice.domain.user.User;
 import service.tradeservice.exception.NotEnoughStockException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public abstract class Item {
     private int price;
     private int stockQuantity;
     //private byte image;
-    private LocalDateTime registerDate;
+    private String registerDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "register_status")
@@ -49,7 +50,7 @@ public abstract class Item {
     private List<Favorite> favorite = new ArrayList<>();
 
     public void setRegisteredItemDate() {
-        this.registerDate = LocalDateTime.now();
+        this.registerDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         this.registerStatus = service.tradeservice.domain.item.RegisterStatus.SALE;
     }
 
@@ -91,13 +92,15 @@ public abstract class Item {
         this.itemName = itemName;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.registerDate = LocalDateTime.now();
+        this.registerDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         this.registerStatus = RegisterStatus.SALE;
     }
 
+    public Item(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
     public void updateItemInfo(Item item) {
-        this.itemName = item.itemName;
-        this.price = item.price;
         this.stockQuantity = item.stockQuantity;
         //this.image = item.image;
     }

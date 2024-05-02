@@ -2,8 +2,12 @@ package service.tradeservice.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -15,18 +19,23 @@ public class Content {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id")
     private Room room;
 
-    private Long sendUser;
+    private String sendUser;
 
-    private LocalDateTime sendDate;
+    private String sendDate;
 
     private String content;
 
-    public Content(Long userId,Room room, String content) {
-        this.sendUser = userId;
+    public Content(String nickName,Room room, String content) {
+        this.sendUser = nickName;
         this.room = room;
-        this.sendDate = LocalDateTime.now();
+        this.sendDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss"));
+        this.content = content;
+    }
+
+    public Content(String content) {
         this.content = content;
     }
 
