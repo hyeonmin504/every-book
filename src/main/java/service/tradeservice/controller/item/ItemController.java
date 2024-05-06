@@ -206,7 +206,8 @@ public class ItemController {
                              @PathVariable("userId") Long userId,
                              Model model) {
 
-        try {Category cate = Category.valueOf(category);
+        try {
+            Category cate = Category.valueOf(category);
             bookForm.setCategory(cate);
         } catch (Exception e) {
             return "page/sell/item";
