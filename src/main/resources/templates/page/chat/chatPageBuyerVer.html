@@ -41,12 +41,52 @@
     </div>
   </div>
   <div>
-    <form action="book.html" th:action th:object="${form}" method="post">
+    <form id="confirmationForm" action="book.html" th:action th:object="${form}" method="post">
       <input type="text" id="data" th:field="*{message}" class="form-control" th:errorclass="field-error" autofocus>
       <button type="submit">메시지 보내기</button>
-      <button type="button" onclick="location.href='@{/purchaseConfirmation}'">구매 확정하기</button>
+      <button id="confirmButton" type="button">구매 확정하기</button>
     </form>
   </div>
 </div>
+
+<!-- 팝업 모달 -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p>정말 구매를 확정하시겠습니까?</p>
+    <button id="confirmPurchaseButton">확인</button>
+  </div>
+</div>
+
+<script>
+  // 구매 확정 버튼 클릭 이벤트 처리
+  document.getElementById("confirmButton").addEventListener("click", function() {
+    // roomId를 가져와서 팝업 모달을 표시
+    var roomId = '${roomId}';
+    showConfirmation(roomId);
+  });
+
+  // 팝업 모달 표시 함수
+  function showConfirmation(roomId) {
+    var modal = document.getElementById("confirmationModal");
+    modal.style.display = "block";
+
+    // 구매 확정 버튼의 클릭 이벤트 처리
+    document.getElementById("confirmPurchaseButton").addEventListener("click", function() {
+      // 여기에 구매 확정 시 실행할 내용을 추가하세요.
+      // 예를 들어, 서버로 요청을 보내거나 다른 동작을 수행할 수 있습니다.
+      // 이 예제에서는 roomId를 사용하여 URL을 생성하고 페이지로 이동합니다.
+      var url = `/purchaseConfirmation/${roomId}`;
+      window.location.href = url;
+    });
+  }
+
+  // 팝업 모달 닫기 함수
+  function closeModal() {
+    var modal = document.getElementById("confirmationModal");
+    modal.style.display = "none";
+  }
+</script>
+
 </body>
 </html>
