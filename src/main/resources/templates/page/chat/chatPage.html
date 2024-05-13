@@ -17,7 +17,7 @@
 <body>
 <div class="container">
     <div>
-        <button type="button" th:onclick="|location.href='@{/page/roomPage/{userId}(userId=${userId})}'|">뒤로 가기</button>
+        <button type="button" th:onclick="|location.href='@{/page/main/{userId}(userId=${userId})}'|">뒤로 가기</button>
     </div>
     <hr class="my-4">
 
@@ -44,6 +44,7 @@
         <form action="book.html" th:action th:object="${form}" method="post">
             <input type="text" id="data" th:field="*{message}" class="form-control" th:errorclass="field-error" autofocus>
             <button type="submit">메시지 보내기</button>
+            <button type="button" onclick="location.href='@{/purchaseConfirmation}'">구매 확정하기</button>
         </form>
     </div>
 </div>

@@ -10,7 +10,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.tradeservice.domain.Content;
 import service.tradeservice.domain.Room;
 import service.tradeservice.repository.RoomRepository;
+import service.tradeservice.repository.UserRepository;
 import service.tradeservice.service.ContentService;
+import service.tradeservice.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,8 @@ public class ChatController {
 
     @Autowired
     RoomRepository roomRepository;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     ContentService contentService;
 
@@ -40,11 +44,17 @@ public class ChatController {
         model.addAttribute("chats",chatForms);
         model.addAttribute("userId",userId);
         model.addAttribute("form",form);
+        model.addAttribute("roomId",roomId);
 
         //세션에 채팅 정보 보관
         HttpSession session = request.getSession();
         session.setAttribute("CHAT_INFO", chatForms);
-        return "page/chat/chatPage";
+
+        Long sellerId = roomRepository.findById(roomId).orElseThrow().getItem().getSellerId();
+        if (userRepository.findById(userId).orElseThrow().getId().equals(sellerId)){
+            return "page/chat/chatPageSellerVer";
+        }
+        return "page/chat/chatPageBuyerVer";
     }
 
     @PostMapping("/{userId}/chatPage/{roomId}")
