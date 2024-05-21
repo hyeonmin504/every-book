@@ -15,7 +15,7 @@ import service.tradeservice.domain.user.User;
 import java.util.List;
 
 @Repository
-@Transactional
+@Slf4j
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
     @Autowired
@@ -28,6 +28,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
      */
     @Override
     public List<Room> findRoom(Item item) {
+        log.info("findRoomQuery start");
         return em.createQuery("select r from Item i " +
                 "join i.rooms r " +
                 "join r.order o " +

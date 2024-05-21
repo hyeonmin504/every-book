@@ -25,7 +25,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id")
     private Room room;
 
