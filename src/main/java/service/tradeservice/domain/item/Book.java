@@ -1,13 +1,16 @@
 package service.tradeservice.domain.item;
 
 import jakarta.persistence.Entity;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Slf4j
 @NoArgsConstructor
 public class Book extends Item {
     private String isbn;
@@ -65,7 +68,8 @@ public class Book extends Item {
     public static Book updateBook(Book book,Book findBook) {
         findBook.updateItemInfo(book);
         findBook.setBook(book.author,book.publisher,book.publisherDate,book.bookStatus,book.writtenStatus);
-
+        log.info("findBook={}",findBook);
+        log.info("book={}",book);
         return findBook;
     }
 

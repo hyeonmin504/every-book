@@ -1,10 +1,7 @@
 package service.tradeservice.domain.item;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Cleanup;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import service.tradeservice.domain.Favorite;
 import service.tradeservice.domain.Room;
@@ -102,6 +99,8 @@ public abstract class Item {
 
     public void updateItemInfo(Item item) {
         this.stockQuantity = item.stockQuantity;
+        this.price = item.price;
+        this.registerDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         //this.image = item.image;
     }
 }

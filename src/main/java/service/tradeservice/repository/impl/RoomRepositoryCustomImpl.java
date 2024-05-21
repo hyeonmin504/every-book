@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import service.tradeservice.domain.Order;
 import service.tradeservice.domain.Room;
 import service.tradeservice.domain.item.Item;
 import service.tradeservice.domain.user.User;
@@ -31,6 +32,14 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom{
                 .setParameter("user", user)
                 .setParameter("item", item)
                 .setParameter("orderCount", orderCount)
+                .getResultList();
+    }
+
+    @Override
+    public List<Room> findOrderByRoom() {
+        return em.createQuery(
+                "select r from Room r " +
+                        "join fetch r.order o",Room.class)
                 .getResultList();
     }
 

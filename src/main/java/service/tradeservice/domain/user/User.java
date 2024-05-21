@@ -35,10 +35,10 @@ public class User {
 
     private String joinDate;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Room> rooms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Favorite> favorites = new ArrayList<>();
 
     private int soldItemCount;
