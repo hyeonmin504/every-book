@@ -19,3 +19,8 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+        transaction: DEBUG

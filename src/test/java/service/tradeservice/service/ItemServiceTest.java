@@ -1,5 +1,6 @@
 package service.tradeservice.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemServiceTest {
 
     @Autowired
+    EntityManager em;
+    @Autowired
     ItemService itemService;
     @Autowired
     ItemRepository itemRepository;
@@ -46,14 +49,20 @@ class ItemServiceTest {
         //given
         User user = new User("hy_min", University.SAMYOOK,"hyunmin504@naver.com", "hoon0504~");
         Book item = new Book(Category.BOOK,"책 이름",10000,3 , "저자", "출판사","20240402",2, 2);
+        Book item1 = new Book(Category.BOOK,"책 이름",10000,4 , "저자", "출판사","20240402",2, 2);
+        Book item2= new Book(Category.BOOK,"책 이름",10000,5 , "저자", "출판사","20240402",2, 2);
 
         //when
         User savedUser = userService.join(user);
         Book savedItem = itemService.registBook(item, savedUser.getId());
+        Book savedItem1 = itemService.registBook(item1, savedUser.getId());
+        Book savedItem2 = itemService.registBook(item2, savedUser.getId());
 
         Book newItem = new Book(Category.BOOK,"책 이름",20000,2 , "저자", "출판사","20240402",2, 2);
 
         User findUser = userRepository.findById(savedUser.getId()).orElseThrow();
+
+        em.clear();
         Book book = itemService.updateBook(newItem, savedItem.getId(), findUser.getId());
 
         Item findItem = itemRepository.findById(savedItem.getId()).orElseThrow();

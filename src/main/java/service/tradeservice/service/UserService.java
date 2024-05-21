@@ -16,8 +16,7 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public User join(User user) {

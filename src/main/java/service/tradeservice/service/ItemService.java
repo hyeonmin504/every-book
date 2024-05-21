@@ -60,7 +60,9 @@ public class ItemService {
 
     //이미 만들어진 채팅방이 있는지 확인
     private void checkRoomExistValidation(Book newBook) {
+        log.info("checkRoomExistValidation start");
         List<Room> room = itemRepository.findRoom(newBook);
+        log.info("room.size={}",room.size());
         if (room.isEmpty()){
             log.info("findRoom");
             return ;
