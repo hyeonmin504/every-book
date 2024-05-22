@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+  <title>mainPage</title>
+  <style>
+    .container {
+        max-width: 560px;
+    }
+    .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div>
+    <button type="button" th:onclick="|location.href='@{/page/main/{userId}(userId=${userId})}'|">뒤로 가기</button>
+  </div>
+  <hr class="my-4">
+
+  <div th:if="${chats.isEmpty()}">
+    <p>채팅이 없습니다.</p>
+  </div>
+
+  <div th:if="${not chats.isEmpty()}">
+    <div class="row">
+      <div class="col">
+        <table class="table">
+          <tbody>
+          <tr th:each="chat : ${chats}">
+            <td th:text="${chat.sender}">sendUser</td>
+            <td th:text="${chat.message}">content</td>
+            <td th:text="${chat.time}">time</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div>
+    <form id="confirmationForm" action="book.html" th:action th:object="${form}" method="post">
+      <input type="text" id="data" th:field="*{message}" class="form-control" th:errorclass="field-error" autofocus>
+      <button type="submit">메시지 보내기</button>
+      <button id="confirmButton" type="button">구매 확정하기</button>
+    </form>
+  </div>
+</div>
+
+<!-- 팝업 모달 -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p>정말 구매를 확정하시겠습니까?</p>
+    <button id="confirmPurchaseButton">확인</button>
+  </div>
+</div>
+
+<script>
+  // 구매 확정 버튼 클릭 이벤트 처리
+  document.getElementById("confirmButton").addEventListener("click", function() {
+    // roomId를 가져와서 팝업 모달을 표시
+    var roomId = '${roomId}';
+    showConfirmation(roomId);
+  });
+
+  // 팝업 모달 표시 함수
+  function showConfirmation(roomId) {
+    var modal = document.getElementById("confirmationModal");
+    modal.style.display = "block";
+
+    // 구매 확정 버튼의 클릭 이벤트 처리
+    document.getElementById("confirmPurchaseButton").addEventListener("click", function() {
+      // 여기에 구매 확정 시 실행할 내용을 추가하세요.
+      // 예를 들어, 서버로 요청을 보내거나 다른 동작을 수행할 수 있습니다.
+      // 이 예제에서는 roomId를 사용하여 URL을 생성하고 페이지로 이동합니다.
+      var url = `/purchaseConfirmation/${roomId}`;
+      window.location.href = url;
+    });
+  }
+
+  // 팝업 모달 닫기 함수
+  function closeModal() {
+    var modal = document.getElementById("confirmationModal");
+    modal.style.display = "none";
+  }
+</script>
+
+</body>
+</html>
