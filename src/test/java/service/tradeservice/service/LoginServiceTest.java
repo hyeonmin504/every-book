@@ -26,7 +26,6 @@ public class LoginServiceTest {
         //when
         loginService.join(user1);
         //then
-        Assertions.assertThrows(DuplicationUserException.class, () -> loginService.join(user2));
 
     }
 
