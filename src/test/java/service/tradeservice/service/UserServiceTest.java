@@ -18,7 +18,6 @@ import service.tradeservice.domain.user.University;
 import service.tradeservice.domain.user.User;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
