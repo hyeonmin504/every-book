@@ -2,7 +2,7 @@ spring:
   messages:
     basename: messages,errors
   datasource:
-    url: jdbc:mysql://mydb.c386s8m62hr2.ap-northeast-2.rds.amazonaws.com:3306/service?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://database-1.c386s8m62hr2.ap-northeast-2.rds.amazonaws.com:3306/service
     username: root
     password: 12341234
     driver-class-name: com.mysql.cj.jdbc.Driver
