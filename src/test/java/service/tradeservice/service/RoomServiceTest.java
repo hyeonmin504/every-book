@@ -17,6 +17,7 @@ import service.tradeservice.domain.user.User;
 import service.tradeservice.exception.AuthRequitedException;
 import service.tradeservice.exception.CancelException;
 import service.tradeservice.exception.ChangeException;
+import service.tradeservice.exception.NotEnoughStockException;
 
 import java.time.LocalDateTime;
 
@@ -134,7 +135,7 @@ class RoomServiceTest {
         Room room1 = roomService.createRoom(buyer.getId(), savedItem2.getId(), 3);
         roomService.sellItemConfirm(room1.getId());
         roomService.buyItemConfirm(room1.getId());
-        assertThrows(CancelException.class, () -> roomService.createRoom(buyer.getId(),savedItem2.getId(),3));
+        assertThrows(NotEnoughStockException.class, () -> roomService.createRoom(buyer.getId(),savedItem2.getId(),3));
 
 
         //CancelTradeRoom
