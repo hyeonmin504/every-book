@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  aroundhub_redis:
+    image: redis:7.0.0
+    restart: always
+    ports:
+      - "6379:6379"
+
+  spring_boot_app:
+    build: .
+    depends_on:
+      - aroundhub_redis
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_REDIS_HOST: aroundhub_redis
+      SPRING_REDIS_PORT: 6379

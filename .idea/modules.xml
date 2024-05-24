@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/trade-service.iml" filepath="$PROJECT_DIR$/.idea/modules/trade-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/trade-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/trade-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/trade-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/trade-service.test.iml" />
     </modules>
   </component>
 </project>
