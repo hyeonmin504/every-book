@@ -48,7 +48,7 @@ public class LoginController {
         }
         log.info("회원 존재");
         form.setNickName(login.getNickName());
-
+        form.setId(login.getId());
         //로그인 성공 처리
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();

@@ -31,7 +31,7 @@ public class Content {
     public Content(String nickName,Room room, String content) {
         this.sendUser = nickName;
         this.room = room;
-        this.sendDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss"));
+        this.sendDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd.HH:mm:ss"));
         this.content = content;
     }
 

@@ -48,7 +48,7 @@
                         <th>상품 번호</th>
                         <th>상품이름</th>
                         <th>가격</th>
-                        <th>구매자</th>
+                        <th>판매 개수</th>
                         <th>내용</th>
                         <th>받은 시간</th>
                         <th>주문 상태</th>
@@ -59,7 +59,7 @@
                         <td th:text="${room.id}">id</td>
                         <td th:text="${room.itemName}">상품이름</td>
                         <td th:text="${room.price}">가격</td>
-                        <td th:text="${room.sendUserNickName}">구매자</td>
+                        <td th:text="${room.stock}">구매자</td>
                         <td th:text="${room.content}">내용</td>
                         <td th:text="${room.sendDate}">받은 시간</td>
                         <td th:text="${room.orderStatus}">주문 상태</td>

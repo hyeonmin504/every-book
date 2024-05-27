@@ -10,6 +10,7 @@ import service.tradeservice.exception.DuplicationUserException;
 import service.tradeservice.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,13 +32,13 @@ public class UserService {
 
 
     public String checkDuplicateUser(User user) {
-        List<User> findEmail = userRepository.findByEmail(user.getEmail());
+        Optional<User> findEmail = userRepository.findByEmail(user.getEmail());
         List<User> findName = userRepository.findByNickName(user.getNickName());
         if (!findName.isEmpty()){
             log.info("이미 존재하는 닉네임입니다");
             return "sameNick";
         }
-        if (!findEmail.isEmpty()){
+        if (findEmail.isPresent()){
             log.info("이미 존재하는 회원입니다.");
             return "sameEmail";
         }

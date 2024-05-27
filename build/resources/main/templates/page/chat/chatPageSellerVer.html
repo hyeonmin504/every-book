@@ -4,13 +4,45 @@
   <meta charset="utf-8">
   <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
   <title>mainPage</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     .container {
-        max-width: 560px;
+      max-width: 560px;
     }
     .field-error {
-        border-color: #dc3545;
-        color: #dc3545;
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -42,11 +74,120 @@
   </div>
   <div>
     <form action="book.html" th:action th:object="${form}" method="post">
-      <input type="text" id="data" th:field="*{message}" class="form-control" th:errorclass="field-error" autofocus>
+      <input type="text" id="data" maxlength="100" th:field="*{message}" class="form-control" th:errorclass="field-error" autofocus>
       <button type="submit">메시지 보내기</button>
-      <button type="button" onclick="location.href='@{/purchaseConfirmation}'">판매 확정하기</button>
+      <button id="confirmButton" type="button">판매 확정하기</button>
+      <button id="cancelButton" type="button">판매 취소하기</button>
     </form>
   </div>
 </div>
+
+<!-- 팝업 모달 -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p>정말 판매를 확정하시겠습니까?</p>
+    <button id="confirmSellButton">확인</button>
+  </div>
+</div>
+<div id="cancelModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p>정말 판매를 취소하시겠습니까?</p>
+    <button id="cancelSellButton">확인</button>
+  </div>
+</div>
+
 </body>
 </html>
+<script>
+  $(document).ready(function() {
+    // 판매 확정 버튼의 클릭 이벤트 처리
+    $("#confirmButton").on("click", function() {
+      var roomId = [[${roomId}]];
+
+      if (roomId) {
+        showConfirmation(roomId);
+      } else {
+        console.error("roomId가 유효하지 않습니다.");
+      }
+    });
+
+    // 판매 취소 버튼의 클릭 이벤트 처리
+    $("#cancelButton").on("click", function() {
+      var roomId = [[${roomId}]];
+
+      if (roomId) {
+        showCancel(roomId);
+      } else {
+        console.error("roomId가 유효하지 않습니다.");
+      }
+    });
+
+    // 팝업 모달 표시 함수
+    function showConfirmation(roomId) {
+      $("#confirmationModal").show();
+
+      // 판매 확정 버튼의 클릭 이벤트 처리
+      $("#confirmSellButton").on("click", function() {
+        $.ajax({
+          url: "/sellConfirmation/" + roomId,
+          type: "POST",
+          contentType: "application/x-www-form-urlencoded",
+          success: function(data, textStatus, xhr) {
+            if (data.errorCode === 200) {
+              closeModal();
+              alert("판매확정 완료!");
+            } else {
+              // 기타 오류 메시지 표시
+              closeModal();
+              alert(data.errorMessage);
+            }
+            closeModal();
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            // 오류 메시지 표시
+            closeModal();
+            alert(xhr.responseText);
+          }
+        });
+      });
+    }
+
+    // 판매 취소 팝업 모달 표시 함수
+    function showCancel(roomId) {
+      $("#cancelModal").show();
+
+      // 판매 취소 버튼의 클릭 이벤트 처리
+      $("#cancelSellButton").on("click", function() {
+        $.ajax({
+          url: "/sellCancel/" + roomId,
+          type: "POST",
+          contentType: "application/x-www-form-urlencoded",
+          success: function(data, textStatus, xhr) {
+            if (data.errorCode === 200) {
+              closeModal();
+              alert("판매취소 완료!");
+            } else {
+              // 기타 오류 메시지 표시
+              closeModal();
+              alert(data.errorMessage);
+            }
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            // 오류 메시지 표시
+            closeModal();
+            alert(xhr.responseText);
+          }
+        });
+      });
+    }
+    // 팝업 모달 닫기 함수
+    function closeModal() {
+      $(".modal").hide();
+    }
+    $(".close").on("click", function() { // **바뀐 부분**: 닫기 버튼에 클릭 이벤트 리스너 추가
+      closeModal();
+    });
+  });
+</script>

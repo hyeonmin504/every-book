@@ -23,7 +23,7 @@ RoomListForm {
     private Long id;
     //content
     @NotNull
-    private String sendUserNickName;
+    private int stock;
     @NotEmpty
     private String sendDate;
     @NotEmpty
@@ -42,9 +42,9 @@ RoomListForm {
     public RoomListForm() {
     }
 
-    public RoomListForm(int orderStatus, Long id, User user, String sendDate, String content, String itemName, int price) {
+    public RoomListForm(int orderStatus, Long id, int stock, String sendDate, String content, String itemName, int price) {
         transformStatus(orderStatus);
-        setContentInfo(id, user, sendDate, content);
+        setContentInfo(id, stock, sendDate, content);
         setItemInfo(itemName, price);
     }
 
@@ -67,9 +67,9 @@ RoomListForm {
         this.orderStatus = orderStatus;
     }
 
-    public void setContentInfo(Long id, User user, String sendDate, String content) {
+    public void setContentInfo(Long id, int stock, String sendDate, String content) {
         this.id = id;
-        this.sendUserNickName = user.getNickName();
+        this.stock = stock;
         this.sendDate = sendDate;
         this.content = content;
     }

@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginForm {
+    private Long id;
     @NotEmpty
     @Email
     private String email;
-
     @NotEmpty
     private String password;
 
