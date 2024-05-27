@@ -6,6 +6,9 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  redis:
+    host: ${SPRING_REDIS_HOST:localhost}
+    port: ${SPRING_REDIS_PORT:6379}
 
   jpa:
     hibernate:
@@ -17,7 +20,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: info
     org.hibernate.type: trace
     org:
       springframework:
