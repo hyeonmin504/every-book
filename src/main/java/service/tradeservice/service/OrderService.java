@@ -36,7 +36,7 @@ public class OrderService {
         int newStock = stockUpdateValidation(getRoom,stock);
         if (newStock == 0) {
             log.info("newStock={}",newStock);
-            roomService.CancelTradeRoom(getRoom.getUser().getId(), getRoom.getId());
+            roomService.cancelTradeRoom(getRoom.getUser().getId(), getRoom.getId());
             return ;
         }
         getOrder.changeStock(newStock);

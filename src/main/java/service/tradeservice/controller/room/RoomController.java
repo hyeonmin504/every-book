@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.tradeservice.controller.chat.ChatForm;
 import service.tradeservice.domain.Content;
 import service.tradeservice.domain.Room;
+import service.tradeservice.domain.item.RegisterStatus;
 import service.tradeservice.login.LoginForm;
 import service.tradeservice.repository.RoomRepository;
 import service.tradeservice.service.ContentService;
@@ -18,6 +19,9 @@ import service.tradeservice.service.RoomService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @Controller
 @Slf4j
@@ -34,6 +38,10 @@ public class RoomController {
                            @SessionAttribute(name = "LOGIN_MEMBER",required = false) LoginForm loginForm) {
         log.info("getMapping roomPage");
         List<Room> allRoom = roomService.findAllRoom(userId);
+        allRoom = allRoom.stream()
+                .filter(room -> !room.getItem().getRegisterStatus().equals(RegisterStatus.CANCEL))
+                .collect(toList());
+
         List<RoomListForm> roomList= contentService.findAllRoomAtRoomList(userId,allRoom);
 
         model.addAttribute("rooms",roomList);

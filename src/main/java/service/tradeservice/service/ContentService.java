@@ -60,10 +60,10 @@ public class ContentService{
             User seller = userRepository.findById(room.getItem().getSellerId()).orElseThrow();
             if (seller.getId().equals(userId)) {
                 Content content = findLastInfoSellerVer(seller.getId(),room.getId());
-                forms.add(new RoomListForm(room.getOrder().getOrderStatus(),room.getId(),seller,content.getSendDate(),content.getContent(),room.getItem().getItemName(),room.getItem().getPrice()));
+                forms.add(new RoomListForm(room.getOrder().getOrderStatus(),room.getId(),room.getOrder().getStock(),content.getSendDate(),content.getContent(),room.getItem().getItemName(),room.getItem().getPrice()));
             } else if (room.getUser().getId().equals(userId)) {
                 Content content = findLastInfo(userId, room.getId());
-                forms.add(new RoomListForm(room.getOrder().getOrderStatus(),room.getId(),seller,content.getSendDate(),content.getContent(),room.getItem().getItemName(),room.getItem().getPrice()));
+                forms.add(new RoomListForm(room.getOrder().getOrderStatus(),room.getId(),room.getOrder().getStock(),content.getSendDate(),content.getContent(),room.getItem().getItemName(),room.getItem().getPrice()));
             }
         }
         return forms;

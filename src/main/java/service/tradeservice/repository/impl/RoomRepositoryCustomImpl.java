@@ -23,7 +23,6 @@ public class RoomRepositoryCustomImpl implements RoomRepositoryCustom{
 
     @Override
     public List<Room> findSameRoom(User user, Item item, int orderCount) {
-        log.info("findSameRoom");
         return em.createQuery("select r from Room r " +
                         "join fetch r.order o " +
                         "where r.user=:user " +
